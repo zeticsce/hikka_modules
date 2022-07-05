@@ -91,7 +91,7 @@ class RPMod(loader.Module):
 					if x.isalpha() or x.isspace() or x.isdigit() or x in string.punctuation:
 						await utils.answer(message, f"<b>Были введены не только эмодзи(пробел тоже символ). </b>")
 						return
-				if len(lst) > 3:
+				if len(lst) > 100:
 					await utils.answer(message, f"<b>Было введено более 3 эмодзи.</b>")
 					return
 				elif not emoji_rp or not emoji_rp.strip():
