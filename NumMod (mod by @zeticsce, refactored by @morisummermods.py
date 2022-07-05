@@ -298,7 +298,7 @@ class NumMod(loader.Module):
                 text):
             send_mesа = send_mesа.groupdict()
             send_mesа['link'], send_mesа['id'] = '@' + send_mesа['id'] if send_mesа['id'] else send_mesа['link'], ''
-            send_mesа['z'] = '[U]заразить[/U] '
+            send_mesа['z'] = '/заразить '
             send_mesа['lvl'] = send_mesа['lvl'] or ''
             mes = ''.join(send_mesа.values())
             await message.respond(mes)
@@ -346,10 +346,10 @@ class NumMod(loader.Module):
             await message.respond(mes)
 
         if re.search(r"болезни", text):
-            await message.respond('[I]/мои болезни[/I]')
+            await message.respond('/мои болезни')
         if re.search(r"жертвы", text):
-            await message.respond('/[I]мои жертвы[/I]')
+            await message.respond('/мои жертвы')
         if re.search(r"лаб[уа]{,2}", text):
-            await message.respond('/[I]моя лаборатория[/I]')
+            await message.respond('/моя лаборатория')
         elif re.search(r"лечись|хи[лльсяйинг]{,2}", text):
-            await message.respond('/[I]купить вакцину[/I]')
+            await message.respond('/купить вакцину')
