@@ -183,8 +183,8 @@ class NumMod(loader.Module):
                 self.db.set("NumMod", "infList", infList)
                 await utils.answer(
                     message,
-                    f"Пользователь <code>{user}</code> добавлен в список заражений.\n"
-                    f"Число: <code>{count}</code>\n"
+                    f"Жертва <code>{user}</code> добавлена.\n"
+                    f"☣️ <b>{count}</b>\n"
                     f"Дата: <b>{vremya}</b>"
                 )
         elif args_list[0] == "clear":
@@ -193,7 +193,7 @@ class NumMod(loader.Module):
             await utils.answer(message, "Лист заражений <b>очищен</b>.")
         elif args_list[0] in infList and 'ф' in args.lower():
             user = infList[args_list[0]]
-            await utils.answer(message, f"<b>• <code>{args_list[0]}</code> -- {user[0]} [<i>{user[1]}</i>]</b>")
+            await utils.answer(message, f"<b>• <code>{args_list[0]}</code> -- ☣️ {user[0]}  <i>{user[1]}</i>]</b>")
         elif len(args_list) == 1 and args_list[0] in infList:
             infList.pop(args_list[0])
             self.db.set("NumMod", "infList", infList)
@@ -213,9 +213,9 @@ class NumMod(loader.Module):
             self.db.set("NumMod", "infList", infList)
             await utils.answer(
                 message,
-                f"Пользователь <code>{user}</code> добавлен в список заражений.\n"
-                f"Число: <code>{count}</code>{k}\n"
-                f"Дата: <b>{vremya}</b>"
+                f"Жертва <code>{user}</code> добавлена.\n"
+                f"☣️ <b>{count}</b>\n"
+                f"Дата: <b>{vremya}</b>
             )
 
     async def numfiltercmd(self, message):
