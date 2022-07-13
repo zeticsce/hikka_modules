@@ -96,6 +96,6 @@ class DianaListMod(loader.Module):
 					
 					
 					f"Дата: <b>{vremya}</b>\n"
-					f"☣️ <b>{count}</b>"
+					f"☣️ <b>{count}</b>{k}"
                 )
 
