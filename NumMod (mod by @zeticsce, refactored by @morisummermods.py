@@ -219,8 +219,8 @@ class NumMod(loader.Module):
                     f"Жертва <code>{user}</code> добавлена.\n"
 					
 					
-					f"Дата: <b>{vremya}</b>\n"
-					f"☣️ <b>{count}</b>"
+					f"Дата: {vremya}\n"
+					f"☣️ <b>{count}</b>{k}"
                 )
 
     async def numfiltercmd(self, message):
