@@ -14,7 +14,8 @@
 #                           Human-friendly one:
 #            https://creativecommons.org/licenses/by-nc-nd/4.0
 
-# meta developer: @D4n13l3k00
+# developer: @D4n13l3k00
+# meta developer: @zeticsce
 
 
 import re
@@ -31,7 +32,7 @@ class SenderMod(loader.Module):
     @loader.owner
     async def sndcmd(self, m):
         """.snd <канал/чат/id> <reply>
-        Отпрпвить сообшение в чат/канал(без авторства)
+        Отправить сообшение в чат/канал(без авторства)
         """
         args = utils.get_args_raw(m)
         reply = await m.get_reply_message()
@@ -47,3 +48,4 @@ class SenderMod(loader.Module):
             return await m.edit("[Sender] Неизвестная мне ошибка:\n" + " ".join(e.args))
         await m.client.send_message(this, reply)
         await m.edit("[Sender] Сообщение отправлено!")
+        await m.delete()
