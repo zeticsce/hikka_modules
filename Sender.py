@@ -47,5 +47,4 @@ class SenderMod(loader.Module):
         except Exception as e:
             return await m.edit("[Sender] Неизвестная мне ошибка:\n" + " ".join(e.args))
         await m.client.send_message(this, reply)
-        await m.edit("[Sender] Сообщение отправлено!")
         await m.delete()
