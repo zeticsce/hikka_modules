@@ -64,7 +64,7 @@ class DianaListMod(loader.Module):
 					
 					
 					f"Дата: <b>{vremya}</b>\n"
-					f"☣️ <b>{count}</b>"
+					f"☣️ <b>{count}</b> био-опыта."
                 )
         elif args_list[0] == "clear":
             infList.clear()
@@ -96,6 +96,6 @@ class DianaListMod(loader.Module):
 					
 					
 					f"Дата: <b>{vremya}</b>\n"
-					f"☣️ <b>{count}</b>{k}"
+					f"☣️ <b>{count}</b>{k} био-опыта."
                 )
 
