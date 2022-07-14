@@ -296,7 +296,7 @@ class NumMod(loader.Module):
         if not text.startswith(filter_and_users['filter']): return
 
         if send_mesа := re.search(
-                r"(?P<z>бей\s|кусь\s|кусай\s|зарази[ть]\s|еби\s|уеби\s{,2}\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
+                r"(?P<z>бей\s|кусай\s|зараз[ить]|еби\s{,2}\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
                 text):
             send_mesа = send_mesа.groupdict()
             send_mesа['link'], send_mesа['id'] = '@' + send_mesа['id'] if send_mesа['id'] else send_mesа['link'], ''
