@@ -182,13 +182,11 @@ class NumMod(loader.Module):
                 user = '@' + text[x:].split('"', maxsplit=1)[0]
                 infList[user] = [str(count), vremya]
                 self.db.set("NumMod", "infList", infList)
-                await utils.answer( 
+                await utils.answer(
                     message,
-                    f"Жертва <code>{user}</code> добавлена.\n"
-					
-					
-					f"Дата: <b>{vremya}</b>\n"
-					f"☣️ <b>{count}</b> био-опыта."
+                    f"Пользователь <code>{user}</code> добавлен в список заражений.\n"
+                    f"Число: <code>{count}</code>\n"
+                    f"Дата: <b>{vremya}</b>"
                 )
         elif args_list[0] == "clear":
             infList.clear()
@@ -196,7 +194,7 @@ class NumMod(loader.Module):
             await utils.answer(message, "Лист заражений <b>очищен</b>.")
         elif args_list[0] in infList and 'ф' in args.lower():
             user = infList[args_list[0]]
-            await utils.answer(message, f"<b>• <code>{args_list[0]}</code> -- ☣️ {user[0]}</b> [<i>{user[1]}</i>]")
+            await utils.answer(message, f"<b>• <code>{args_list[0]}</code> -- {user[0]} [<i>{user[1]}</i>]</b>")
         elif len(args_list) == 1 and args_list[0] in infList:
             infList.pop(args_list[0])
             self.db.set("NumMod", "infList", infList)
@@ -214,8 +212,8 @@ class NumMod(loader.Module):
                 k += 'k'
             infList[user] = [str(count) + k, vremya]
             self.db.set("NumMod", "infList", infList)
-            await utils.answer( 
-                    message,
+            await utils.answer(
+                message,
                     f"Жертва <code>{user}</code> добавлена.\n"
 					
 					
@@ -238,8 +236,8 @@ class NumMod(loader.Module):
                 f"-t --- запустить|остановить.\n"
                 f"<b>{'✅Запущен' if filter_and_users['status'] else '❌Остановлен'}.</b>\n\n"
                 f"<b>Работает так:</b>\n"
-                f"[фильтр] (еби|бей|кусь|кусай|уеби|зарази) (1-10) ((@id|user)|link(даже полный линк ид'а))\n"
-                f"[фильтр] лечись|хи[лльсяйинг]\n"
+                f"[фильтр] (еби|бей|кусь|кусай|уеби|зарази[ть]) (1-10) ((@id|user)|link(даже полный линк ид'а))\n"
+                f"[фильтр] лечись|хил[льсяйинг]\n"
                 f"[фильтр] жертвы\n"
                 f"[фильтр] болезни\n"
                 f"[фильтр] лаб[уа]\n"
@@ -298,7 +296,7 @@ class NumMod(loader.Module):
         if not text.startswith(filter_and_users['filter']): return
 
         if send_mesа := re.search(
-                r"(?P<z>бей\s|кусь\s|кусай\s|зарази\s|еби\s|уеби\s{,2}\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
+                r"(?P<z>бей\s|кусь\s|кусай\s|зарази[ть]\s|еби\s|уеби\s{,2}\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
                 text):
             send_mesа = send_mesа.groupdict()
             send_mesа['link'], send_mesа['id'] = '@' + send_mesа['id'] if send_mesа['id'] else send_mesа['link'], ''
@@ -307,7 +305,40 @@ class NumMod(loader.Module):
             mes = ''.join(send_mesа.values())
             await message.respond(mes)
 
+        elif send_mesz := re.search(r"(?P<zar>заразность\s)(?P<lvl>[0-5]+)", text):
+            send_mesz = send_mesz.groupdict()
+            send_mesz['zar'] = '++заразность '
+            send_mesz['lvl'] = send_mesz['lvl'] or ''
+            mes = ''.join(send_mesz.values())
+            await message.respond(mes)
+
+        elif send_mesp := re.search(r"(?P<pat>патоген\s)(?P<lvl>[0-5]+)", text):
+            send_mesp = send_mesp.groupdict()
+            send_mesp['pat'] = '++патоген '
+            send_mesp['lvl'] = send_mesp['lvl'] or ''
+            mes = ''.join(send_mesp.values())
+            await message.respond(mes)
+
+        elif send_mesl := re.search(r"(?P<let>летальность\s)(?P<lvl>[1-5]+)", text):
+            send_mesl = send_mesl.groupdict()
+            send_mesl['let'] = '++летальность '
+            send_mesl['lvl'] = send_mesl['lvl'] or ''
+            mes = ''.join(send_mesl.values())
+            await message.respond(mes)
+
+        elif send_mesk := re.search(r"(?P<kvala>разработка\s|квалификация\s)(?P<lvl>[0-5]+)", text):
+            send_mesk = send_mesk.groupdict()
+            send_mesk['kvala'] = '++квалификация '
+            send_mesk['lvl'] = send_mesk['lvl'] or ''
+            mes = ''.join(send_mesk.values())
+            await message.respond(mes)
         
+        elif send_mesb := re.search(r"(?P<sb>безопасность\s)(?P<lvl>[0-5]+)", text):
+            send_mesb = send_mesb.groupdict()
+            send_mesb['sb'] = '++безопасность '
+            send_mesb['lvl'] = send_mesb['lvl'] or ''
+            mes = ''.join(send_mesb.values())
+            await message.respond(mes)
 
         if re.search(r"болезни", text):
             await message.respond('/мои болезни')
