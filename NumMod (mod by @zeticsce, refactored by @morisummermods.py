@@ -188,7 +188,7 @@ class NumMod(loader.Module):
 					
 					
 					f"Дата: <b>{vremya}</b>\n"
-					f"☣️ <b>{count}</b>"
+					f"☣️ <b>{count}</b> био-опыта."
                 )
         elif args_list[0] == "clear":
             infList.clear()
@@ -220,7 +220,7 @@ class NumMod(loader.Module):
 					
 					
 					f"Дата: {vremya}\n"
-					f"☣️ <b>{count}</b>{k}"
+					f"☣️ <b>{count}{k}</b> био-опыта."
                 )
 
     async def numfiltercmd(self, message):
