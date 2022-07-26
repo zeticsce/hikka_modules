@@ -50,14 +50,14 @@ class IdMod(loader.Module):
 							list = []
 							for i in link.split('='):
 								list.append(i)
-							await message.reply(f'･ <code>Заразить 10 @{list[1]}</code>\n'
+							await message.reply(f'<b>･</b> <code>Заразить 10 @{list[1]}</code>\n'
 												f'<b>User:</b> <code>@{list[1]}</code>\n'
 												f'<i>Команда и тег кликабельные.</i>'
 							)
 							break
 						elif link.startswith('https://t.me'):
 							a ='@' + str(link.split('/')[3])
-							await message.reply(f'･ <code>Заразить 10 {a}</code>\n'
+							await message.reply(f'<b>･</b> <code>Заразить 10 {a}</code>\n'
 												f'<b>User:</b> <code>{a}</code>\n'
 												f'<i>Команда и тег кликабельные.</i>'
 							
