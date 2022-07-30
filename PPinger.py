@@ -64,7 +64,7 @@ class PingerMod(loader.Module):
 			if message.sender_id != self.me.id:
 				entity = 'me_bot_twink'
 			else: entity = 'me_bot'
-		ping_msg, ping_data, ping_ans = await pping(message, entity, a, t)
+		ping_msg, ping_data, ping_ans = await ping(message, entity, a, t)
 		ping = f"""<code>med:</code> {str(median(ping_data))[0:5]}
 <code>avg:</code> {str(mean(ping_data))[0:5]}
 <code>max:</code> {str(max(ping_data))[0:5]}
