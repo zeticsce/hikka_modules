@@ -94,7 +94,7 @@ class lapshaMod(loader.Module):
         elif len(list_args) >= 3:
             await message.respond('<b>заражения успешно завершены.</b>')
             await asyncio.sleep(3)
-        await message.delete()
+            await message.delete()
 
     async def оcmd(self, message):
         """заражает всех по реплаю."""
@@ -126,7 +126,7 @@ class lapshaMod(loader.Module):
                                                   json["entities"][i]["offset"]:json["entities"][i]["offset"] +
                                                                                 json["entities"][i]["length"]])
             await asyncio.sleep(3)
-        await message.delete()
+        
 
     async def exnumcmd(self, message):
         """добавляет исключения в модуль.\nиспользуй: .exnum {@user/@id}"""
