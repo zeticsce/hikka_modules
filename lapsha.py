@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 @loader.tds
 class lapshaMod(loader.Module):
-    """25 килобайт счастья)"""
+    """26 килобайт счастья)"""
 
     strings = {
         "name": "lapsha"
