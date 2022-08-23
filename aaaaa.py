@@ -18,11 +18,11 @@ logger = logging.getLogger(__name__)
 
 
 @loader.tds
-class AчоMod(loader.Module):
+class ABCDEMod(loader.Module):
     """26 килобайт счастья)"""
 
     strings = {
-        "name": "aчо"
+        "name": "ABCDE"
     
     }
 
