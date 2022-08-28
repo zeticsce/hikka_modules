@@ -293,7 +293,7 @@ class ABCDEMod(loader.Module):
                 f"<b>☣️ {count}{k}</b> био-опыта."
             )
 
-    async def numfiltercmd(self, message):
+    async def довcmd(self, message):
         """ .numfilter {args1} {args2 OR reply} \nвызови команду, чтобы просмотреть аргументы."""
         args = utils.get_args_raw(message)
         reply = await message.get_reply_message()
@@ -325,7 +325,7 @@ class ABCDEMod(loader.Module):
         args = args.split(' ', maxsplit=1)
         if len(args) == 1 and not reply and args[0] != '-t':
             return await utils.answer(message, '❌ нет 2 аргумента и реплая.')
-        elif args[0] == '-sU':
+        elif args[0] == 'сет':
             try:
                 user_id = args[1]
                 if not user_id.isdigit():
@@ -341,14 +341,14 @@ class ABCDEMod(loader.Module):
             else:
                 return await utils.answer(message, '❌ Превышен лимит в 20 юзеров.')
             return self.db.set("NumMod", "numfilter", filter_and_users)
-        elif args[0] == '-sF':
+        elif args[0] == 'фильтр':
             try:
                 filter_and_users['filter'] = args[1].lower().strip()
                 self.db.set("NumMod", "numfilter", filter_and_users)
                 return await utils.answer(message, f"✅ фильтр ~~~ <code>{args[1]}</code> ~~~ успешно установлен!")
             except Exception:
                 return await utils.answer(message, "где 2 аргумент❓")
-        elif args[0] == '-t':
+        elif args[0] == 'пуск':
             if filter_and_users['status']:
                 filter_and_users['status'] = False
                 self.db.set("NumMod", "numfilter", filter_and_users)
@@ -474,7 +474,7 @@ class ABCDEMod(loader.Module):
         
         if re.search(r"поставь вирусы|уведы", text):
             await message.respond('+вирусы')
-        if re.search(r"убери вирусы|убери уведы", text):
+        if re.search(r"убери вирусы", text):
             await message.respond('-вирусы')
         elif re.search(r"вакцин[ау]|ва[ккц]|лечись|хи[лльсяйинг]{,2}", text):
             await message.respond('/купить вакцину')
