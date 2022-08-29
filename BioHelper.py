@@ -149,7 +149,7 @@ class BioHelperMod(loader.Module):
             
 
     async def оcmd(self, message):
-        """Заражает всех по реплаю.\nИспользуй ответ на сообщение с @id/@user/link (даже линк tg://openm..)"""
+        """Заражает всех по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
         reply = await message.get_reply_message()
         exlist = self.db.get("NumMod", "exUsers")
         if not reply:
