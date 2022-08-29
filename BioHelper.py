@@ -133,7 +133,7 @@ class BioHelperMod(loader.Module):
                         else:
                             await message.reply('🤔 Что за хуета?')
                         break
-        await asyncio.sleep(3)   
+            await asyncio.sleep(3)   
 
         if not count_st:
             await message.reply('❌ Не найдено совпадение в начале строк с аргументами.')
