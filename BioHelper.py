@@ -75,7 +75,7 @@ class BioHelperMod(loader.Module):
 
         await utils.answer(
             message,
-            "<b>🥷🏻User:</b> <a href='tg://openmessage?user_id={}'>{}</a>\n<b>🆔:</b> <code>@{}</code>".format(
+            "<b>🥷🏻</b> <a href='tg://openmessage?user_id={}'>{}</a>\n<b>🆔:</b> <code>@{}</code>".format(
                 user_info["user_id"], user_info["firstname"], user_info["user_id"]
             )
         )
