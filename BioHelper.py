@@ -346,7 +346,7 @@ class BioHelperMod(loader.Module):
                 f"<b>🧪 <code>Патоген</code> (паты)</b>\n<b>👨‍🔬 <code>Квалификация</code> (квала)</b>\n"
                 f"<b>🦠 <code>Заразность</code> (зз)</b>\n<b>🛡 <code>Иммунитет</code> (иммун)</b>\n"
                 f"<b>☠️ <code>Летальность</code> (летал)</b>\n<b>🕵️‍♂️ <code>Безопасность</code> (сб)</b>\n\n"
-                f"<i>❤️ With love, @zeticsce </i>"
+                f"<i><3 With love, @zeticsce </i>"
             )
         args = args.split(' ', maxsplit=1)
         if len(args) == 1 and not reply and args[0] != 'пуск': # 
