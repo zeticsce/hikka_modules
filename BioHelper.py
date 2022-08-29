@@ -399,11 +399,11 @@ class BioHelperMod(loader.Module):
         if not text.startswith(filter_and_users['filter']): return
 
         if send_mesа := re.search(
-                r"(?P<z>бей\s|кус[ьай]\s|зарази[ть]\s|еб[и]|уеб[и]\s{,2}\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
+                r"(?P<z>бей\s|ку[сиьай]\s|зараз[ить]\s|е[би]\s|уе[би]\s{,2}\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
                 text):
             send_mesа = send_mesа.groupdict()
             send_mesа['link'], send_mesа['id'] = '@' + send_mesа['id'] if send_mesа['id'] else send_mesа['link'], ''
-            send_mesа['z'] = 'заразить '
+            send_mesа['z'] = '/заразить '
             send_mesа['lvl'] = send_mesа['lvl'] or ''
             mes = ''.join(send_mesа.values())
             await message.respond(mes)
@@ -505,7 +505,7 @@ class BioHelperMod(loader.Module):
             await message.respond('+вирусы')
         if re.search(r"убери вирусы", text):
             await message.respond('-вирусы')
-        elif re.search(r"вакцин[ау]|ва[ккц]|лечись|хи[лльсяйинг]{,2}", text):
+        elif re.search(r"вакци[нау]|ва[ккц]|лечись|хи[лльсяйинг]{,2}", text):
             await message.respond('/купить вакцину')
         
             
