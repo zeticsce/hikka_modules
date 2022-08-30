@@ -294,18 +294,18 @@ class ABCDEMod(loader.Module):
             )
 
     async def довcmd(self, message):
-        """ .numfilter {args1} {args2 OR reply} \nвызови команду, чтобы просмотреть аргументы."""
+        """ {args1} {args2 OR reply} \nвызови команду, чтобы просмотреть аргументы."""
         args = utils.get_args_raw(message)
         reply = await message.get_reply_message()
         filter_and_users = self.db.get("NumMod", "numfilter", {'users': [], 'filter': None, 'status': False})
         if not args:
             return await utils.answer(
                 message,
-                f"-sU --- добавить|удалить юзеров(не больше 20), на которых будет триггериться фильтр(ид|реплай).\n"
+                f"сет --- добавить|удалить юзеров(не больше 20), на которых будет триггериться фильтр(ид|реплай).\n"
                 f"[{', '.join([f'<code>{i}</code>' for i in filter_and_users['users']])}]\n"
-                f"-sF --- установить фильтр. допустим один.\n"
+                f"ник --- установить фильтр. допустим один.\n"
                 f"<code>{filter_and_users['filter'] or '❌не установлен.'}</code>\n"
-                f"-t --- запустить|остановить.\n"
+                f"пуск --- запустить|остановить.\n"
                 f"<b>{'✅запущен' if filter_and_users['status'] else '❌остановлен'}.</b>\n\n"
                 f"<b>работает так:</b>\n"
                 f"[фильтр] (еби|еб|бей|кусь|кусай|уеби|зарази|заразить) (1-10) ((@id|user)|link(даже полный линк ид'а))\n"
@@ -323,42 +323,46 @@ class ABCDEMod(loader.Module):
                 f"Игнор регистра!!"
             )
         args = args.split(' ', maxsplit=1)
-        if len(args) == 1 and not reply and args[0] != '-t':
-            return await utils.answer(message, '❌ нет 2 аргумента и реплая.')
+        if len(args) == 1 and not reply and args[0] != 'пуск':
+            return await utils.answer(message, '🤔 Не могу понять, что за хуета?..')
         elif args[0] == 'сет':
             try:
                 user_id = args[1]
                 if not user_id.isdigit():
-                    return await utils.answer(message, 'это не ид.')
+                    return await utils.answer(message, '👀 Правильно 🆔 введи, дубина.')
             except Exception:
                 user_id = str(reply.sender_id)
             if user_id in filter_and_users['users']:
                 filter_and_users['users'].remove(user_id)
-                await utils.answer(message, f"✅ ид <code>{user_id}</code> удалён.")
+                await utils.answer(message, f"✅ Саппорт <code>{user_id}</code> удалён.")
             elif len(filter_and_users['users']) <= 20:
                 filter_and_users['users'].append(user_id)
-                await utils.answer(message, f"✅ ид <code>{user_id}</code> добавлен.")
+                await utils.answer(message, f"✅ Саппорт <code>{user_id}</code> добавлен.")
             else:
-                return await utils.answer(message, '❌ Превышен лимит в 20 юзеров.')
+                return await utils.answer(message, '❌ Превышен лимит в 20 человек.')
             return self.db.set("NumMod", "numfilter", filter_and_users)
         elif args[0] == 'фильтр':
             try:
                 filter_and_users['filter'] = args[1].lower().strip()
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await utils.answer(message, f"✅ фильтр ~~~ <code>{args[1]}</code> ~~~ успешно установлен!")
+                return await utils.answer(message, f"✅ Ник <code>{args[1]}</code> успешно установлен!")
             except Exception:
-                return await utils.answer(message, "где 2 аргумент❓")
+                return await utils.answer(message, "<b>📝 Введите ник.</b>")
         elif args[0] == 'пуск':
             if filter_and_users['status']:
                 filter_and_users['status'] = False
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await utils.answer(message, "❌ дов(фильтр) остановлен.")
+                return await utils.answer(message, "<b>❎ Успешно остановлено.</b>")
             else:
                 filter_and_users['status'] = True
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await utils.answer(message, "✅ дов(фильтр) запущен.")
+                return await utils.answer(message, "<b>✅ Успешно запущено!</b>")
         else:
-            return await utils.answer(message, "❌ неизвестный аргумент.")
+            return await utils.answer(
+            message,
+            f"<b>❌ Неизвестный аргумент.</b>\n"
+            f"<i>📝 Введите <code>.дов</code> для просмотра команд.</i>"
+            )
 
     async def watcher(self, message):
         if not isinstance(message, telethon.tl.types.Message): return
