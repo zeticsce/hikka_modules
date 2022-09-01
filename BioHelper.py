@@ -329,7 +329,7 @@ class BioHelperMod(loader.Module):
                 f"<b>{'✅ Запущен.' if filter_and_users['status'] else '❌ Остановлен.'}.</b>\n\n"
                 f"<b>❔ Как использовать:</b>\n"
                 f"<b><ник></b> <code>бей</code></b> | <b><code>кус</code></b>ьай |<b><code>зарази</code></b>ть " # 🔽
-                f"| <b><code>еб</code></b>и | <b><code>уеб</code></b>и <b>(1-10) <Ссылка/реплай></b>.\n"
+                f"| <b><code>еб</code></b>и | <b><code>уеби</code></b> <b>(1-10) <Ссылка/реплай></b>.\n"
                 f"<b><ник> <code><b>Вакцин</b></code>ау | <code><b>лечись</code></b> |" # 🔽
                 f"<code><b>ва</code></b>ккц</b> |<code><b>хи</code></b>лльсяйинг\n"
                 f"<b><ник></b> <code>жертвы</code> | <code>ежа</code><b>\n"
@@ -399,7 +399,7 @@ class BioHelperMod(loader.Module):
         if not text.startswith(filter_and_users['filter']): return
 
         if send_mesа := re.search(
-                r"(?P<z>бей\s|ку[сиьай]\s|зараз[ить]\s|е[би]\s|уе[би]\s{,2}\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
+                r"(?P<z>бей\s|кусь\s|кусай\s|зарази\s|заразить\s|еб\s|еби\s|уеби\s{,2}\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
                 text):
             send_mesа = send_mesа.groupdict()
             send_mesа['link'], send_mesа['id'] = '@' + send_mesа['id'] if send_mesа['id'] else send_mesа['link'], ''
@@ -501,9 +501,9 @@ class BioHelperMod(loader.Module):
         if re.search(r"цен[аз]{,2}", text):
             await message.respond('купить вакцину')
         
-        if re.search(r"поставь вирусы|уведы", text):
+        if re.search(r"уведы", text):
             await message.respond('+вирусы')
-        if re.search(r"убери вирусы", text):
+        if re.search(r"-вирусы", text):
             await message.respond('-вирусы')
         elif re.search(r"вакци[нау]|ва[ккц]|лечись|хи[лльсяйинг]{,2}", text):
             await message.respond('/купить вакцину')
