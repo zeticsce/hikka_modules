@@ -255,7 +255,7 @@ class BioHelperMod(loader.Module):
                 self.db.set("NumMod", "infList", infList)
                 await utils.answer(
                     message,
-                    f"✅ Жертва <b><code>{user}</code></b> добавлена в список.\n"
+                    f"✅ Жертва <b><code>{user}</code></b> сохранена.\n"
                     
                     f"<b>☣️ {count}</b> био-опыта."
 
@@ -307,7 +307,7 @@ class BioHelperMod(loader.Module):
             self.db.set("NumMod", "infList", infList)
             await utils.answer(
                 message,
-                f"✅ Жертва <b><code>{user}</code></b> добавлена в список.\n"
+                f"✅ Жертва <b><code>{user}</code></b> сохранена.\n"
                 
                 f"<b>☣️ {count}{k}</b> био-опыта."
             )
@@ -321,7 +321,7 @@ class BioHelperMod(loader.Module):
             return await utils.answer(
                 message,
                 f""
-                f"<b>🌘 <code>.Дов сет</code> [id/reply]</b> <id|реплай> --- Добавить/удалить саппорта (не больше 20).\n"
+                f"<b>🌘 <code>.Дов сет</code> <id|реплай></b> --- Добавить/удалить саппорта (не больше 20).\n"
                 f"[{', '.join([f'<code>{i}</code>' for i in filter_and_users['users']])}]\n"
                 f"<b><code>🌘 .Дов ник</code> <ник></b> --- <b>Установить ник</b>.\n<i>Например: <b><code>.Дов ник </i></code>Влад</b></i>.\n"
                 f"<b>🔰 Ваш ник: <code>{filter_and_users['filter'] or '❌ Не установлен.'}</code></b>\n"
