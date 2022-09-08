@@ -1,4 +1,4 @@
-# modded by @enicaaa & blyat kak suda popal @Yahikoro.
+
 # meta developer of NumMod: @trololo_1
 from .. import loader, utils  # noqa
 import asyncio
@@ -13,16 +13,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 # meta developer: @zeticsce
-# облегчит жизнь пользователям юзерботов. Moded by @enicaaa , @Yahikoro
+# тут был кто-то еще
+
 
 
 
 @loader.tds
-class BioHelperMod(loader.Module):
+class BioMod(loader.Module):
     """Ваша вторая рука в биовойнах)"""
 
     strings = {
-        "name": "🦠 BioHelper"
+        "name": "🦠 Bio"
     
     }
 
