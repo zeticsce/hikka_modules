@@ -355,90 +355,90 @@ class BioMod(loader.Module):
             send_mesа['z'] = '/заразить '
             send_mesа['lvl'] = send_mesа['lvl'] or ''
             mes = ''.join(send_mesа.values())
-            await message.respond(mes)
+            await message.reply(mes)
 ####### чеки
         elif send_mes := re.search(r"(?P<ch>зараз[уканость]{,5} чек[айниуть]{,4}\s|зз чек[айниуть]{,4}\s|чек[ниуть]{,4} зз\s|чек[айниуть]{,4} зараз[куаность]{,5}\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['ch'] = '+заразность '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<pat>пат[огены]{,5} чек[айниуть]\s|чек[айниуть]{,4} пат[огены]{,5}\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['pat'] = '+патоген '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<let>летал[каьностьу]{,5} чек[айниуть]{,4}\s|чек[айниуть]{,4} летал[каьностьу]{,5}\s)(?P<lvl>[1-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['let'] = '+летальность '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<kvala>квал[лаификацияу]{,8} чек[айниуть]{,4}\s|разраб[откау]{,4} чек[айниуть]{,4}\s|чек[айниуть]{,4} разраб[откау]{,4}\s|чек[айниуть]{,4} квал[улаификация]{,8}\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['kvala'] = '+квалификация '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<imun>чек[айниуть]{,4} иммун[еитеткау]{,4}\s|чек[айниуть]{,4} имун[еитеткау]{,4}\s|имун[еитеткау]{,4} чек[айниуть]{,4}\s|иммун[еитеткау]{,4} чек[айниуть]{,4}\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['imun'] = '+иммунитет '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<sb>сб чек[айниуть]{,4}\s|безопасно[сть]{,3} чек[айниуть]{,4}\s|служб[ау]{,2} чек[айниуть]{,4}\s|служб[ау]{,2} безопасно[стиь] чек[айниуть]{,4}|чек[айниуть]{,4} служб[ау]{,2} безопасно[стиь]\s|чек[айниуть]{,4} служб[ау]{,2}\s|чек[айниуть]{,4} безопасно[сть]{,3}\s|чек[айниуть]{,4} сб\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['sb'] = '+безопасность '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<zar>зараз[уканость]{,5}\s|зз\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['zar'] = '++заразность '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<pat>пат[огены]{,5}\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['pat'] = '++патоген '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<let>летал[укаьность]{,5}\s)(?P<lvl>[1-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['let'] = '++летальность '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<kvala>квал[улаификация]{,8}\s|разраб[откау]{,4}\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['kvala'] = '++квалификация '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<imun>иммун[уеитетка]{,4}|имун[уеитетка]{,4}\s)(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['imun'] = '++иммунитет '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         elif send_mes := re.search(r"(?P<sb>сб\s|безопасно[сть]{,3}\s|служб[ау]{,2} безопасно[стиь]{,3})(?P<lvl>[0-5]+)", text):
             send_mes = send_mes.groupdict()
             send_mes['sb'] = '++безопасность '
             send_mes['lvl'] = send_mes['lvl'] or ''
             mes = ''.join(send_mes.values())
-            await message.respond(mes)
+            await message.reply(mes)
         if re.search(r"бол[езьни]{,2}", text):
-            await message.respond('/мои болезни')
+            await message.reply('/мои болезни')
         if re.search(r"жертв[ыау]{,2}|еж[а]{,2}", text):
-            await message.respond('/мои жертвы')
+            await message.reply('/мои жертвы')
         if re.search(r"стат[ыа]{,2}|лаб[уа]{,2}", text):
             await message.reply('/заразить 10')
         if re.search(r"цен[аз]{,2}", text):
-            await message.respond('купить вакцину')
+            await message.reply('купить вакцину')
         if re.search(r"увед[ыаомления]{,2}", text):
-            await message.respond('+вирусы')
+            await message.reply('+вирусы')
         if re.search(r"-вирус[ыа]{,2}", text):
             await message.respond('-вирусы')
         elif re.search(r"вак[цинау]{,2}|лечись|хи[лльсяйинг]{,2}", text):
