@@ -26,7 +26,7 @@ class DianaListMod(loader.Module):
         if not self.db.get("DianaNumMod", "DianainfList", False):
             self.db.set("DianaNumMod", "DianainfList", {})    
 
-    async def заррcmd(self, message):
+    async def зрcmd(self, message):
         """ Лист заражений дианы.\n.зар {@id/user} {count} {args}\nДля удаления: .зарр {@id/user}\nАргументы:\nк --
         добавить букву k(тысяч) к числу.\nф -- поиск по ид'у/юзеру.\nр -- добавлению в список по реплаю. """
         args = utils.get_args_raw(message)
