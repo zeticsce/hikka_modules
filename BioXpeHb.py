@@ -434,7 +434,7 @@ class BioMod(loader.Module):
         if re.search(r"жертв[ыау]{,2}|еж[а]{,2}", text):
             await message.respond('/мои жертвы')
         if re.search(r"стат[ыа]{,2}|лаб[уа]{,2}", text):
-            await message.respond('/лаб')
+            await message.reply('/заразить 10')
         if re.search(r"цен[аз]{,2}", text):
             await message.respond('купить вакцину')
         if re.search(r"увед[ыаомления]{,2}", text):
