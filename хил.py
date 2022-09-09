@@ -15,14 +15,14 @@ class HENumMod(loader.Module):
 		if not self.db.get("HENumMod", "infList", False):
 			self.db.set("HENumMod", "infList", {})
 	async def hillcmd(self, message):
-		""" .hill {args1} {args2 OR reply} \nВызови команду, чтобы просмотреть аргументы."""
+		""" .Введи .hill для инструкции"""
 		args = utils.get_args_raw(message)
 		reply = await message.get_reply_message()
 		filter_and_users = self.db.get("HENumMod", "hill", {'users': [], 'filter': None, 'status': False})
 		if not args:
 			return await utils.answer(message, f"-sU --- добавить|удалить юзеров(не больше 20), на которых будет триггериться фильтр(ид|реплай).\n[{', '.join(list('<code>' + i + '</code>' for i in filter_and_users['users']))}]\n-sF --- установить фильтр. Допустим один.\n<code>{filter_and_users['filter'] if filter_and_users['filter'] else '❌Не установлен.'}</code>\n-t --- запустить|остановить.\n<b>{'✅Запущен' if filter_and_users['status'] else '❌Остановлен'}.</b>\n\n"
 				f"Для настройки модуля введи команды ниже:\n"
-				f"<code>.hill -sF хил</code>\n\n"
+				f"<code>.hill -sF хи</code>\n\n"
 				f"<code>.hill -sU</code> (ответом на это сообщение)\n\n"
 				f"<code>.hill -t</code>"
 			)
@@ -72,7 +72,7 @@ class HENumMod(loader.Module):
 		text = message.raw_text.lower()
 		if not text.startswith(filter_and_users['filter']): return
 		
-		send_mes = re.search(r"хи[лльсяйинг]{,2}", text)
+		send_mes = re.search(r"хи[лльсяйинг]{,5}", text)
 		if send_mes: 
 			await message.respond('/купить вакцину')
 			await message.delete()
