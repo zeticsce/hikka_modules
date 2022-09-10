@@ -1,4 +1,4 @@
-__version__ = (1, 7, 9)
+__version__ = (1, 2, 9)
 
 #           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -24,7 +24,6 @@ import json as JSON
 from datetime import datetime, date, time
 import logging
 import types
-logger = logging.getLogger(__name__)
 
 @loader.tds
 class BioMod(loader.Module):
@@ -72,7 +71,7 @@ class BioMod(loader.Module):
                 "firstname": entity.first_name
             }
     async def айcmd(self, message):
-        """[@user/@id/linkID/reply]\nПолучает айди пользователя по реплаю и по тегу"""
+        """[id/linkID/reply]\nПолучает айди пользователя по реплаю."""
         reply = await message.get_reply_message()
         vlad = message.sender_id
         args = utils.get_args(message)
@@ -114,7 +113,7 @@ class BioMod(loader.Module):
                 try:
                     list_args.extend(str(x) for x in range(int(ot_do[0]), int(ot_do[1]) + 1))
                 except Exception:
-                    await message.reply('❌ еблан, Используй правильно функцию "от-до".')
+                    await message.reply('❌ еблан, Используй <b>правильно</b> функцию "от-до".')
                     return
             else:
                 list_args.append(i)
@@ -144,7 +143,7 @@ class BioMod(loader.Module):
                         else:
                             await message.reply('🤔 Что за хуета?')
                         break
-            await asyncio.sleep(3)   
+            await asyncio.sleep(3.3)   
         if not count_st:
             await message.reply('❌ Не найдено совпадение в начале строк с аргументами.')
         elif not count_hf:
@@ -180,7 +179,7 @@ class BioMod(loader.Module):
                 await message.reply("/заразить " + reply.raw_text[
                                                   json["entities"][i]["offset"]:json["entities"][i]["offset"] +
                                                                                 json["entities"][i]["length"]])
-            await asyncio.sleep(3)
+            await asyncio.sleep(3.3)
         await message.delete()
     async def искcmd(self, message):
         """Добавляет исключения для команд .з и .о\nИспользуй: .иск {@user/@id}"""
@@ -528,35 +527,44 @@ class BioMod(loader.Module):
                             break
             await asyncio.sleep(3)
         if not count_st:
-            await message.edit('❌ Не найдено совпадение в начале строк с аргументами.')
+            await message.reply('❌ Не найдено совпадение в начале строк с аргументами.')
         elif not count_hf:
-            await message.edit('❌ Ссылка не найдена.')
-        elif len(list_args) >= 3:
+            await message.reply('❌ Ссылка не найдена.')
+        elif len(list_args) >= 5:
             await message.respond("<b>✅ Id'ы успешно извлечены.</b>" )
-            await asyncio.sleep(3)
+            await asyncio.sleep(3.3)
+
     async def иcmd(self, message):
-        "Чекает все айди по реплаю."
+        """Заражает всех по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
         reply = await message.get_reply_message()
+        exlist = self.db.get("NumMod", "exUsers")
+        if not reply:
+            await message.reply('❌ Нет реплая.')
+            return
         json = JSON.loads(reply.to_json())
-        for i in range(0, len(reply.entities) ):
+        for i in range(len(reply.entities)):
             try:
                 link = json["entities"][i]["url"]
                 if link.startswith('tg'):
-                    list = []
-                    for i in link.split('='):
-                        list.append(i)
-                    await message.reply('/id <code>@' + list[1] + '</code>')
+                    users = '@' + link.split('=')[1]
+                    if users in exlist:
+                        await message.reply(f'/id <code>{users}</code>')
+                    else:
+                        await message.reply(f'/id <code>{users}</code>')
                 elif link.startswith('https://t.me'):
-                    a ='@' + str(link.split('/')[3])
-                    await message.reply(f'/id <code>{a}</code>')
+                    a = '@' 
+                    if a in exlist:
+                        await message.reply(f'/id <code>{a}</code>')
+                    else:
+                        await message.reply(f'/id <code>{a}</code>')
                 else:
                     await message.reply('🤔 Что за хуета?')
-            except:
-                await message.reply("/id " + "<code>" + reply.raw_text[json["entities"][i]["offset"]:json["entities"][i]["offset"]+json["entities"][i]["length"]] + "</code>" )
-            await asyncio.sleep(3)
+            except Exception:
+                await message.reply("/заразить " + 'code' + reply.raw_text[
+                                                  json["entities"][i]["offset"]:json["entities"][i]["offset"] +
+                                                                                json["entities"][i]["length"]] + '/code')
+            await asyncio.sleep(3.3)
         await message.delete()
-
-
 
 
 
