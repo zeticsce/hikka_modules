@@ -535,7 +535,7 @@ class BioMod(loader.Module):
             await asyncio.sleep(3.3)
 
     async def иcmd(self, message):
-        """Заражает всех по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
+        """Чекает все айди по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
         reply = await message.get_reply_message()
         exlist = self.db.get("NumMod", "exUsers")
         if not reply:
