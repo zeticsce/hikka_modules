@@ -96,14 +96,14 @@ class BioMod(loader.Module):
         exlist = self.db.get("NumMod", "exUsers")
         count_st = 0
         count_hf = 0
-        vladebi = reply.sender_id
+        vlad = reply.sender_id
         if not reply:
             await message.reply('❌ Нет реплая.')
             return
         args = utils.get_args_raw(message)
         list_args = []
         if not args:
-            await message.reply(f'<code>/заразить 10 @{vladebi}<code>')
+            await message.reply(f'<code>/заразить 10 @{vlad}<code>')
             await asyncio.sleep(1)
             await message.delete()
             return
@@ -207,11 +207,11 @@ class BioMod(loader.Module):
         if args in exlist:
             exlist.remove(args)
             self.db.set("NumMod", "exUsers", exlist)
-            await message.edit(f'❎ Пользователь <code>{args}</code> исключен.')
+            await message.edit(f'❎ Игрок <code>{args}</code> удален.')
             return
         exlist.append(args)
         self.db.set("NumMod", "exUsers", exlist)
-        await message.edit(f'✅ Пользователь <code>{args}</code> в исключениях.')
+        await message.edit(f'✅ Игрок <code>{args}</code> в исключениях.')
     async def зарcmd(self, message):
         """ Список ваших заражений.\n.зар {@id/user} {count} {args}\nДля удаления: .зар {@id/user}\nАргументы:\nк -- добавить букву k(тысяч) к числу.\nф -- поиск по ид'у/юзеру.\nр -- добавлению в список по реплаю. """
         args = utils.get_args_raw(message)
@@ -220,6 +220,7 @@ class BioMod(loader.Module):
         vremya = datetime.now(pytz.timezone(timezone)).strftime("%d.%m")
         with contextlib.suppress(Exception):
             args_list = args.split(' ')
+        ###
         if not args:
             if not infList:
                 await utils.answer(message, "❌ Список заражений пуст.")
@@ -229,26 +230,35 @@ class BioMod(loader.Module):
                 infList.items())
             await utils.answer(message, sms)
             return
+        ##
+        ###
         if 'р' in args.lower():
             reply = await message.get_reply_message()
-            text = reply.text
+            
             if not reply:
                 return await utils.answer(message, '❌ Нет реплая на сообщение ириса о заражении.')
-            elif reply.sender_id != 707693258 and 'Заражение на' not in reply.text:
-                return await utils.answer(message, '❌ Реплай <b>не</b> на сообщение ириса о заражении "<b>...подверг заражению...</b>"')
-            else:  # ☣
+            ##
+            if reply:
+                trueZ = 'подверг заражению'
+                trueZ2 = 'подвергла заражению' # да, я еблан)
                 text = reply.text
-                x = text.index('☣') + 4
-                count = text[x:].split(' ', maxsplit=1)[0]
-                x = text.index('user?id=') + 8
-                user = '@' + text[x:].split('"', maxsplit=1)[0]
-                infList[user] = [str(count), vremya]
-                self.db.set("NumMod", "infList", infList)
-                await utils.answer(
-                    message,
-                    f"✅ Жертва <b><code>{user}</code></b> сохранена.\n"
-                    f"<b>☣️ {count}</b> био-опыта."
-                )
+                if trueZ not in reply.text and trueZ2 not in reply.text:
+                    await message.reply('❌ Реплай <b>не</b> на сообщение ириса о заражении "<b>...подверг заражению...</b>"')
+                else:  # ☣
+                    try:
+                        text = reply.text
+                        x = text.index('☣') + 4
+                        count = text[x:].split(' ', maxsplit=1)[0]
+                        x = text.index('user?id=') + 8
+                        user = '@' + text[x:].split('"', maxsplit=1)[0]
+                        infList[user] = [str(count), vremya]
+                        self.db.set("NumMod", "infList", infList)
+                        await message.reply(
+                            f"✅ Жертва <b><code>{user}</code></b> сохранена.\n"
+                            f"<b>☣️ {count}</b> био-опыта."
+                        )
+                    except ValueError:
+                        await message.reply('😣 Нет ссылки на жертву.')
         elif args_list[0] == "clear":
             infList.clear()
             self.db.set("NumMod", "infList", infList)
@@ -256,30 +266,63 @@ class BioMod(loader.Module):
                 message,
             f"✅ Зарлист <b>очищен</b>."
             )
-        elif args_list[0] in infList and 'ф' in args.lower():
-            user = infList[args_list[0]]
-            await utils.answer(message,
-                f"✅ Жертва <code>{args_list[0]}</code> приносит:\n"
-                f"<b>☣️ {user[0]} био-опыта.</b>\n"
-                f"📆 Дата: <i>{user[1]}</i>"
-            )
+
+        elif 'ф' in args.lower():
+            reply = await message.get_reply_message()
+            if not reply:            
+            
+                if args_list[0] in infList:
+                    user = infList[args_list[0]]
+                    await utils.answer(message,
+                        f"✅ Жертва <code>{args_list[0]}</code> приносит:\n"
+                        f"<b>☣️ {user[0]} био-опыта.</b>\n"
+                        f"📆 Дата: <i>{user[1]}</i>"
+                    )
+                if args_list[0] not in infList:
+                    if  '@' not in args:
+                        await message.reply(
+                            f"<emoji document_id=5379667175004969388>🤔</emoji> а кого искать?.."
+                        )
+                    else:    
+                        await message.reply(
+                        f"❎ Жертва не найдена."
+                        )      
+            if reply:
+                rawid = str(reply.sender_id)
+                rid = '@' + rawid
+                user = infList
+                if args_list[0] in infList:
+                    await message.reply(
+                        f"✅ Жертва <code>{args_list[0]}</code> приносит:\n"
+                        f"<b>☣️ {user[0]} био-опыта.</b>\n"
+                        f"📆 Дата: <i>{user[1]}</i>"
+                    )                 
+                try:
+                    if rid in infList[rid]:
+                        await message.reply(
+                            f"✅ Жертва <code>{rid}</code> приносит:\n"
+                            f"<b>☣️ {user[0]} био-опыта.</b>\n"
+                            f"📆 Дата: <i>{user[1]}</i>"
+                        )
+                except KeyError:
+                    await message.reply(
+                        f"❎ Жертва не найдена."
+                    )
+        
         elif len(args_list) == 1 and args_list[0] in infList:
             infList.pop(args_list[0])
             self.db.set("NumMod", "infList", infList)
             await utils.answer(
                 message, 
-                f"❌ Жертва <b><code>{args}</code></b> удалена из списка."
+                f"❎ Жертва <b><code>{args}</code></b> удалена из списка."
             )
-        elif args_list[0][0] != '@':
-            await utils.answer(message,
-            f'🥱 Вы некорректно ввели ID.'
-            )
+
         else:
             try:
                 user, count = str(args_list[0]), float(args_list[1])
             except Exception:
                 await utils.answer(message, 
-                    f"❎ Данного пользователя нет в списке."
+                    f"❌ Команда введена некорректно."
                     )
                 return
             k = ''
@@ -340,11 +383,9 @@ class BioMod(loader.Module):
             if user_id in filter_and_users['users']:
                 filter_and_users['users'].remove(user_id)
                 await utils.answer(message, f"❎ Саппорт <b><code>{user_id}</code></b> удалён.")
-            elif len(filter_and_users['users']) <= 20:
+            elif user_id not in filter_and_users['users']:
                 filter_and_users['users'].append(user_id)
                 await utils.answer(message, f"✅ Саппорт <b><code>{user_id}</code></b> добавлен!")
-            else:
-                return await utils.answer(message, '❌ Превышен лимит в 20 человек.')
             return self.db.set("NumMod", "numfilter", filter_and_users)
         elif args[0] == 'ник':
             try:
@@ -462,8 +503,8 @@ class BioMod(loader.Module):
             await message.reply('/мои болезни')
         if re.search(r"жертв[ыау]{,2}|еж[а]{,2}", text):
             await message.reply('/мои жертвы')
-        if re.search(r"стат[ыа]{,2}|лаб[уа]{,2}", text):
-            await message.reply('/лаю')
+        if re.search(r"/стат[ыа]{,2}|/лаб[уа]{,2}", text):
+            await message.reply('/лаба')
         if re.search(r"цен[аз]{,2}", text):
             await message.reply('купить вакцину')
         if re.search(r"увед[ыаомления]{,2}", text):
@@ -560,9 +601,9 @@ class BioMod(loader.Module):
                 else:
                     await message.reply('🤔 Что за хуета?')
             except Exception:
-                await message.reply("/заразить " + 'code' + reply.raw_text[
+                await message.reply("/id " + '<code>' + reply.raw_text[
                                                   json["entities"][i]["offset"]:json["entities"][i]["offset"] +
-                                                                                json["entities"][i]["length"]] + '/code')
+                                                                                json["entities"][i]["length"]] + '</code>')
             await asyncio.sleep(3.3)
         await message.delete()
 
