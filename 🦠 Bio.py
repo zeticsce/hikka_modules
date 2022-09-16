@@ -1,4 +1,4 @@
-__version__ = (1, 2, 9)
+__version__ = (1, 3, 0)
 
 #           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -104,7 +104,7 @@ class BioMod(loader.Module):
         list_args = []
         if not args:
             await message.reply(f'<code>/заразить 10 @{vlad}<code>')
-            await asyncio.sleep(1)
+            await asyncio.sleep(2)
             await message.delete()
             return
         for i in args.split(' '):
@@ -155,7 +155,7 @@ class BioMod(loader.Module):
         reply = await message.get_reply_message()
         exlist = self.db.get("NumMod", "exUsers")
         if not reply:
-            await message.edit('❌ Нет реплая.')
+            await message.reply('❌ Нет реплая.')
             return
         json = JSON.loads(reply.to_json())
         for i in range(len(reply.entities)):
@@ -238,33 +238,32 @@ class BioMod(loader.Module):
             if not reply:
                 return await utils.answer(message, '❌ Нет реплая на сообщение ириса о заражении.')
             ##
-            if reply:
-                trueZ = 'подверг заражению'
-                trueZ2 = 'подвергла заражению' # да, я еблан)
-                text = reply.text
-                if trueZ not in reply.text and trueZ2 not in reply.text:
-                    await message.reply('❌ Реплай <b>не</b> на сообщение ириса о заражении "<b>...подверг заражению...</b>"')
-                else:  # ☣
-                    try:
-                        text = reply.text
-                        x = text.index('☣') + 4
-                        count = text[x:].split(' ', maxsplit=1)[0]
-                        x = text.index('user?id=') + 8
-                        user = '@' + text[x:].split('"', maxsplit=1)[0]
-                        infList[user] = [str(count), vremya]
-                        self.db.set("NumMod", "infList", infList)
-                        await message.reply(
-                            f"✅ Жертва <b><code>{user}</code></b> сохранена.\n"
-                            f"<b>☣️ {count}</b> био-опыта."
-                        )
-                    except ValueError:
-                        await message.reply('😣 Нет ссылки на жертву.')
+
+            trueZ = 'подверг заражению'
+            trueZ2 = 'подвергла заражению' # да, я еблан)
+            text = reply.text
+            if trueZ not in reply.text and trueZ2 not in reply.text:
+                await message.reply('❌ Реплай <b>не</b> на сообщение ириса о заражении "<b>...подверг заражению...</b>"')
+            else:  # ☣
+                try:
+                    text = reply.text
+                    x = text.index('☣') + 4
+                    count = text[x:].split(' ', maxsplit=1)[0]
+                    x = text.index('user?id=') + 8
+                    user = '@' + text[x:].split('"', maxsplit=1)[0]
+                    infList[user] = [str(count), vremya]
+                    self.db.set("NumMod", "infList", infList)
+                    await message.reply(
+                        f"🦠 Жертва <b><code>{user}</code></b> сохранена.\n"
+                        f"<b>☣️ {count}</b> био-опыта."
+                    )
+                except ValueError:
+                    await message.reply('😣 Нет ссылки на жертву.')
         elif args_list[0] == "clear":
             infList.clear()
             self.db.set("NumMod", "infList", infList)
-            await utils.answer(
-                message,
-            f"✅ Зарлист <b>очищен</b>."
+            await message.reply(
+            "✅ Зарлист <b>очищен</b>."
             )
 
         elif 'ф' in args.lower():
@@ -273,7 +272,7 @@ class BioMod(loader.Module):
             
                 if args_list[0] in infList:
                     user = infList[args_list[0]]
-                    await utils.answer(message,
+                    await message.reply(
                         f"✅ Жертва <code>{args_list[0]}</code> приносит:\n"
                         f"<b>☣️ {user[0]} био-опыта.</b>\n"
                         f"📆 Дата: <i>{user[1]}</i>"
@@ -281,39 +280,37 @@ class BioMod(loader.Module):
                 if args_list[0] not in infList:
                     if  '@' not in args:
                         await message.reply(
-                            f"<emoji document_id=5379667175004969388>🤔</emoji> а кого искать?.."
+                            "<emoji document_id=5379667175004969388>🤔</emoji> а кого искать?.."
                         )
                     else:    
                         await message.reply(
-                        f"❎ Жертва не найдена."
+                        "❎ Жертва не найдена."
                         )      
             if reply:
-                rawid = str(reply.sender_id)
-                rid = '@' + rawid
-                user = infList
+                rid = '@' + str(reply.sender_id)  
                 if args_list[0] in infList:
                     await message.reply(
                         f"✅ Жертва <code>{args_list[0]}</code> приносит:\n"
                         f"<b>☣️ {user[0]} био-опыта.</b>\n"
                         f"📆 Дата: <i>{user[1]}</i>"
                     )                 
-                try:
-                    if rid in infList[rid]:
-                        await message.reply(
-                            f"✅ Жертва <code>{rid}</code> приносит:\n"
-                            f"<b>☣️ {user[0]} био-опыта.</b>\n"
-                            f"📆 Дата: <i>{user[1]}</i>"
-                        )
-                except KeyError:
+                elif rid in infList:
+                    user = infList[rid]
                     await message.reply(
-                        f"❎ Жертва не найдена."
+                        f"✅ Жертва <code>{rid}</code> приносит:\n"
+                        f"<b>☣️ {user[0]} био-опыта.</b>\n"
+                        f"📆 Дата: <i>{user[1]}</i>"
                     )
+                        
+                elif rid not in infList:
+                    await message.reply(
+                        "❎ Жертва не найдена."
+                        )
         
         elif len(args_list) == 1 and args_list[0] in infList:
             infList.pop(args_list[0])
             self.db.set("NumMod", "infList", infList)
-            await utils.answer(
-                message, 
+            await message.reply( 
                 f"❎ Жертва <b><code>{args}</code></b> удалена из списка."
             )
 
@@ -321,8 +318,8 @@ class BioMod(loader.Module):
             try:
                 user, count = str(args_list[0]), float(args_list[1])
             except Exception:
-                await utils.answer(message, 
-                    f"❌ Команда введена некорректно."
+                await message.reply( 
+                    "❌ Команда введена некорректно."
                     )
                 return
             k = ''
@@ -330,9 +327,8 @@ class BioMod(loader.Module):
                 k += 'k'
             infList[user] = [str(count) + k, vremya]
             self.db.set("NumMod", "infList", infList)
-            await utils.answer(
-                message,
-                f"✅ Жертва <b><code>{user}</code></b> сохранена.\n"
+            await message.reply(
+                f"🦠 Жертва <b><code>{user}</code></b> сохранена.\n"
                 f"<b>☣️ {count}{k}</b> био-опыта."
             )
     async def довcmd(self, message):
