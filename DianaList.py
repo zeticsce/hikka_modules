@@ -133,7 +133,7 @@ class DianaListMod(loader.Module):
                     )
         elif len(args_list) == 1 and args_list[0] in infList:
             infList.pop(args_list[0])
-            self.db.set("NumMod", "infList", infList)
+            self.db.set("DianaNumMod", "DianainfList", infList)
             await message.reply( 
                 f"❎ Жертва <b><code>{args}</code></b> удалена из списка."
             )
@@ -150,7 +150,7 @@ class DianaListMod(loader.Module):
             if 'к' in args.lower():
                 k += 'k'
             infList[user] = [str(count) + k, vremya]
-            self.db.set("NumMod", "infList", infList)
+            self.db.set("DianaNumMod", "DianainfList", infList)
             await message.reply(
                 self.strings("r.save").format(
                             user, count, k
