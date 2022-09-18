@@ -1,3 +1,18 @@
+__version__ = (2, 0, 0)
+
+#           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
+#           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
+#           ░░███╔═╝█████╗░░░░░██║░░░██║██║░░╚═╝╚█████╗░██║░░╚═╝█████╗░░
+#           ██╔══╝░░██╔══╝░░░░░██║░░░██║██║░░██╗░╚═══██╗██║░░██╗██╔══╝░░
+#           ███████╗███████╗░░░██║░░░██║╚█████╔╝██████╔╝╚█████╔╝███████╗
+#           ╚══════╝╚══════╝░░░╚═╝░░░╚═╝░╚════╝░╚═════╝░░╚════╝░╚══════
+#                                © Copyright 2022
+#                             https://t.me/zeticsce
+#               
+#                   🔒         Licensed under the GNU AGPLv3
+#                   🌐 https://www.gnu.org/licenses/agpl-3.0.html
+# developer of Num: @trololo_1
+# meta developer: @zeticsce
 from .. import loader, utils  # noqa
 import asyncio
 import contextlib
@@ -5,33 +20,74 @@ import pytz
 import re
 import telethon
 from telethon.tl.types import MessageEntityTextUrl
+from telethon.tl.types import Message
 import json as JSON
 from datetime import datetime, date, time
 import logging
 import types
-logger = logging.getLogger(__name__)
-# developer of NumMod: @trololo_1
-# meta developer: @zeticsce
-# тут был кто-то еще
+from ..inline.types import InlineCall
+
 @loader.tds
 class BioMod(loader.Module):
-    """Ваша вторая рука в биовойнах)"""
+    """Ваша вторая рука в биовойнах)\nНОВАЯ КОМАНДА .б"""
     strings = {
-        "name": "🦠 Bio",
-      # Notes and Notexec modules strings:
-        "execute_fail": ("<b>Failed to execute expression:</b>\n<code>{}</code>"),
-        "what_note": "<b>Какую заметку нужно показать?</b>",
-        "no_note": "<b>Заметка не найдена</b>",
-        "save_what": "<b>А что сохранить?</b>",
-        "what_name": "<b>А как будет называться заметка?</b>",
-        "saved": "<b>Заметка сохранена как:</b> <code>{}</code>",
-        "notes_header": "<b>Сохранённые заметки:</b>\n\n",
-        "notes_item": "<b>▷</b> <code>{}</code>",
-        "delnote_args": "<b>А какую заметку нужно удалить?</b>",
-        "delnote_done": "<b>Заметка удалена!</b>",
-        "delnotes_none": "<b>А заметок-то нету...</b>",
-        "delnotes_done": "<b>ВСЕ ЗАМЕТКИ УДАЛЕНЫ</b>",
-        "notes_none": "<b>А заметок-то нету...</b>"
+        
+        "name": "Bio",
+        
+        "not_reply": "<emoji document_id=5215273032553078755>❌</emoji> Нет реплая.",
+        
+        "not_args": "<emoji document_id=5215273032553078755>❌</emoji> Нет аргументов.",
+        
+        "nolink": "<emoji document_id=5197248832928227386>😢</emoji> Нет ссылки на жертву.",
+
+        "hueta": "🤔 Что за хуета?",
+        
+        "r.save":   
+            "<emoji document_id=5212932275376759608>🦠</emoji> Жертва <b><code>{}</code></b> сохранена.\n"
+            "<b>☣️ +{}{}</b> био-опыта.",
+        
+        "search":
+            "<emoji document_id=5212932275376759608>✅</emoji> Жертва <code>{}</code> приносит:\n"
+            "<b>☣️ +{} био-опыта.</b>\n"
+            "📆 Дата: <i>{}</i>",
+        
+        "nf": "<emoji document_id=5215273032553078755>❎</emoji> Жертва не найдена.",
+        
+        "anf": "<emoji document_id=5215329773366025981>🤔</emoji> а кого искать?..",
+
+        "aicmd":
+            "<b>🥷🏻</b> <a href='tg://openmessage?user_id={}'>{}</a>\n"
+            "<b>🆔:</b> <code>@{}</code>",
+        "myid": "<b>My 🆔:</b> <code>@{}</code>",
+        
+        "guidedov":    
+            "<b>❔ Как использовать доверку:</b>\n"
+            "\n<b>{0}</b>  <code>бей</code> | <code>кус</code>[ьайни] | <code>зарази</code>[тьть] " # 🔽
+            "| <code>еб</code>[ниажшь] | <code>уеб</code>[жиаошть] [1-10] (@id|@user|link)"
+            "\n<b>{0}</b>  <code>цен</code>[ау] | <code>вч</code>[ек]  <i>(цена вакцины)</i>"
+            "\n<b>{0}</b>  <code>вак</code>[цинау] | <code>леч</code>[ись] | <code>хи</code>[лльсяйинг] | <code>лек</code>[арство]"
+            "\n<b>{0}</b>  <code>жертв</code>[ыау] | <code>еж</code>[ау]"
+            "\n<b>{0}</b>  <code>бол</code>[езьни]"
+            "\n<b>{0}</b>  <code>#лаб</code>[уа] | <code>%лаб</code>[уа] | <code>/лаб</code>[уа]"
+            "\n<b>{0}</b>  <code>увед</code>[ыаомления]  <i>(+вирусы)</i>"
+            "\n<b>{0}</b>  <code>-вирус</code>[ыа]\n\n"
+            "〽️ <b>Апгрейд навыков:</b>\n"
+            "<b>{0}  навык (0-5)</b> или\n<b>{0}  чек навык (0-5)</b>\n"
+            "<i> Например: <b>{0} квалификация 4</b>\n" 
+            "(улучшает квалификацию учённых на 4 ур.)</i>\n\n"    
+            "〽️ <b>Доступные навыки:</b>\n"
+            "🧪 Патоген (<b>пат</b> [огены])\n👨‍🔬 Квалификация (<b>квал</b> [ификацияула] | <b>разраб</b> [откау])\n"
+            "🦠 Заразность (<b>зз</b> | <b>зараз</b> [аностьку])\n🛡 Иммунитет (<b>иммун</b> [итеткау])\n"
+            "☠️ Летальность (<b>летал</b> [ьностькау])\n🕵️‍♂️ Безопасность (<b>сб</b> | <b>служб</b> [ау] | <b>безопасно</b> [сть])",
+
+        "guidehz":
+            "",
+        
+        "guide":
+            f"<b>Помощь по модулю BioHelper:</b>\n\n"
+            f"<code>.bhelp дов</code> 👈 Помощь по доверке "
+            f"<code>.bhelp </code>"
+
     }
     async def client_ready(self, client, db):
         self.db = db
@@ -59,21 +115,19 @@ class BioMod(loader.Module):
                 "firstname": entity.first_name
             }
     async def айcmd(self, message):
-        """[@user/@id/linkID/reply]\nПолучает айди пользователя по реплаю и по тегу"""
+        """[reply]\nПолучает айди пользователя по реплаю."""
         reply = await message.get_reply_message()
         vlad = message.sender_id
         args = utils.get_args(message)
         user_info = await self.actions(reply, args)
-        if not isinstance(user_info, dict):
-            return await utils.answer(
-            message,
-            "<b>My 🆔:</b> <code>@{}</code>".format(
-                str(vlad)
+        if not reply:
+            return await message.edit(
+                self.strings("myid").format(
+                    vlad
+                )
             )
-        )
-        await utils.answer(
-            message,
-            "<b>🥷🏻</b> <a href='tg://openmessage?user_id={}'>{}</a>\n<b>🆔:</b> <code>@{}</code>".format(
+        await message.edit(
+            self.strings("aicmd").format(
                 user_info["user_id"], user_info["firstname"], user_info["user_id"]
             )
         )
@@ -84,16 +138,21 @@ class BioMod(loader.Module):
         exlist = self.db.get("NumMod", "exUsers")
         count_st = 0
         count_hf = 0
-        vladebi = reply.sender_id
-        if not reply:
-            await message.reply('❌ Нет реплая.')
+        
+        if not reply or not reply and not args:
+            await message.reply(
+                self.strings("not_reply")
+            )
             return
-        args = utils.get_args_raw(message)
+        
+        
         list_args = []
+        args = utils.get_args_raw(message)
         if not args:
-            await message.reply(f'<code>/заразить 10 @{vladebi}<code>')
-            await asyncio.sleep(1)
-            await message.delete()
+            vlad = reply.sender_id
+            await message.reply(
+                f'<code>/заразить 10 @{vlad}<code>\nспасибо <emoji document_id=5215327827745839526>❤️</emoji>'
+            )
             return
         for i in args.split(' '):
             if '-' in i:
@@ -101,7 +160,7 @@ class BioMod(loader.Module):
                 try:
                     list_args.extend(str(x) for x in range(int(ot_do[0]), int(ot_do[1]) + 1))
                 except Exception:
-                    await message.reply('❌ еблан, Используй правильно функцию "от-до".')
+                    await message.reply('❌ еблан, Используй <b>правильно</b> функцию "от-до".')
                     return
             else:
                 list_args.append(i)
@@ -131,7 +190,7 @@ class BioMod(loader.Module):
                         else:
                             await message.reply('🤔 Что за хуета?')
                         break
-            await asyncio.sleep(3)   
+            await asyncio.sleep(3.3)   
         if not count_st:
             await message.reply('❌ Не найдено совпадение в начале строк с аргументами.')
         elif not count_hf:
@@ -142,33 +201,44 @@ class BioMod(loader.Module):
         """Заражает всех по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
         reply = await message.get_reply_message()
         exlist = self.db.get("NumMod", "exUsers")
+        err = "1"
         if not reply:
-            await message.edit('❌ Нет реплая.')
+            await message.reply(
+                self.strings("not_reply")
+            )
             return
         json = JSON.loads(reply.to_json())
-        for i in range(len(reply.entities)):
-            try:
-                link = json["entities"][i]["url"]
-                if link.startswith('tg'):
-                    users = '@' + link.split('=')[1]
-                    if users in exlist:
-                        await message.reply(f'❎ Исключение: <code>{users}</code>')
+        try:
+            for i in range(len(reply.entities)):
+                try:
+                    link = json["entities"][i]["url"]
+                    if link.startswith('tg'):
+                        users = '@' + link.split('=')[1]
+                        if users in exlist:
+                            await message.reply(f'❎ Исключение: <code>{users}</code>')
+                        else:
+                            await message.reply(f'/заразить {users}')
+                    elif link.startswith('https://t.me'):
+                        a = '@' 
+                        if a in exlist:
+                            await message.reply(f'❎ Исключение: <code>{a}</code>')
+                        else:
+                            await message.reply(f'/заразить {a}')
                     else:
-                        await message.reply(f'/заразить {users}')
-                elif link.startswith('https://t.me'):
-                    a = '@' 
-                    if a in exlist:
-                        await message.reply(f'❎ Исключение: <code>{a}</code>')
-                    else:
-                        await message.reply(f'/заразить {a}')
-                else:
-                    await message.reply('🤔 Что за хуета?')
-            except Exception:
-                await message.reply("/заразить " + reply.raw_text[
-                                                  json["entities"][i]["offset"]:json["entities"][i]["offset"] +
-                                                                                json["entities"][i]["length"]])
-            await asyncio.sleep(3)
-        await message.delete()
+                        await message.reply('🤔 Что за хуета?')
+                except Exception:
+                    await message.reply("/заразить " + reply.raw_text[
+                                                      json["entities"][i]["offset"]:json["entities"][i]["offset"] +
+                                                                                    json["entities"][i]["length"]])
+                await asyncio.sleep(3.3)
+        
+        except TypeError:
+            err = "2"
+            await message.reply(
+                self.strings("hueta")
+            )
+        if err != "2":
+            await message.delete()
     async def искcmd(self, message):
         """Добавляет исключения для команд .з и .о\nИспользуй: .иск {@user/@id}"""
         args = utils.get_args_raw(message)
@@ -195,11 +265,11 @@ class BioMod(loader.Module):
         if args in exlist:
             exlist.remove(args)
             self.db.set("NumMod", "exUsers", exlist)
-            await message.edit(f'❎ Пользователь <code>{args}</code> исключен.')
+            await message.edit(f'❎ Игрок <code>{args}</code> удален.')
             return
         exlist.append(args)
         self.db.set("NumMod", "exUsers", exlist)
-        await message.edit(f'✅ Пользователь <code>{args}</code> в исключениях.')
+        await message.edit(f'✅ Игрок <code>{args}</code> в исключениях.')
     async def зарcmd(self, message):
         """ Список ваших заражений.\n.зар {@id/user} {count} {args}\nДля удаления: .зар {@id/user}\nАргументы:\nк -- добавить букву k(тысяч) к числу.\nф -- поиск по ид'у/юзеру.\nр -- добавлению в список по реплаю. """
         args = utils.get_args_raw(message)
@@ -208,6 +278,7 @@ class BioMod(loader.Module):
         vremya = datetime.now(pytz.timezone(timezone)).strftime("%d.%m")
         with contextlib.suppress(Exception):
             args_list = args.split(' ')
+        ###
         if not args:
             if not infList:
                 await utils.answer(message, "❌ Список заражений пуст.")
@@ -217,57 +288,101 @@ class BioMod(loader.Module):
                 infList.items())
             await utils.answer(message, sms)
             return
+        ##
+        ###
         if 'р' in args.lower():
             reply = await message.get_reply_message()
-            text = reply.text
+            
             if not reply:
                 return await utils.answer(message, '❌ Нет реплая на сообщение ириса о заражении.')
-            elif reply.sender_id != 707693258 and 'Заражение на' not in reply.text:
-                return await utils.answer(message, '❌ Реплай <b>не</b> на сообщение ириса о заражении "<b>...подверг заражению...</b>"')
+            ##
+
+            trueZ = 'подверг заражению'
+            trueZ2 = 'подвергла заражению' # да, я еблан)
+            text = reply.text
+            if trueZ not in reply.text and trueZ2 not in reply.text:
+                await message.reply('❌ Реплай <b>не</b> на сообщение ириса о заражении "<b>...подверг заражению...</b>"')
             else:  # ☣
-                text = reply.text
-                x = text.index('☣') + 4
-                count = text[x:].split(' ', maxsplit=1)[0]
-                x = text.index('user?id=') + 8
-                user = '@' + text[x:].split('"', maxsplit=1)[0]
-                infList[user] = [str(count), vremya]
-                self.db.set("NumMod", "infList", infList)
-                await utils.answer(
-                    message,
-                    f"✅ Жертва <b><code>{user}</code></b> сохранена.\n"
-                    f"<b>☣️ {count}</b> био-опыта."
-                )
+                try:
+                    ept = ""
+                    text = reply.text
+                    x = text.index('☣') + 4
+                    count = text[x:].split(' ', maxsplit=1)[0]
+                    x = text.index('user?id=') + 8
+                    user = '@' + text[x:].split('"', maxsplit=1)[0]
+                    infList[user] = [str(count), vremya]
+                    self.db.set("NumMod", "infList", infList)
+                    await message.reply(
+                        self.strings("r.save").format(
+                            user, count, ept
+                        )
+                    )
+                except ValueError:
+                    await message.reply(
+                        self.strings("nolink")
+                    )
         elif args_list[0] == "clear":
             infList.clear()
             self.db.set("NumMod", "infList", infList)
-            await utils.answer(
-                message,
-            f"✅ Зарлист <b>очищен</b>."
+            await message.reply(
+            "✅ Зарлист <b>очищен</b>."
             )
-        elif args_list[0] in infList and 'ф' in args.lower():
-            user = infList[args_list[0]]
-            await utils.answer(message,
-                f"✅ Жертва <code>{args_list[0]}</code> приносит:\n"
-                f"<b>☣️ {user[0]} био-опыта.</b>\n"
-                f"📆 Дата: <i>{user[1]}</i>"
-            )
+
+        elif 'ф' in args.lower():
+            reply = await message.get_reply_message()
+            if not reply:            
+            
+                if args_list[0] in infList:
+                    user = infList[args_list[0]]
+                    await message.reply(
+                        self.strings("search").format(
+                            args_list[0], user[0], user[1]
+                        )
+                    )
+                if args_list[0] not in infList:
+                    if  '@' not in args:
+                        await message.reply(
+                            self.strings("anf")
+                        )
+                    else:    
+                        await message.reply(
+                            self.strings("nf")
+                        )  
+            if reply:
+                rid = '@' + str(reply.sender_id)  
+                if args_list[0] in infList:
+                    user = infList[args_list[0]]
+                    await message.reply(
+                        self.strings("search").format(
+                            args_list[0], user[0], user[1]
+                        )
+                    )                             
+                elif rid in infList:
+                    user = infList[rid]
+                    await message.reply(
+                        self.strings("search").format(
+                            rid, user[0], user[1]
+                        )
+                    )              
+                        
+                elif rid not in infList:
+                        await message.reply(
+                            self.strings("nf")
+                        )  
+        
         elif len(args_list) == 1 and args_list[0] in infList:
             infList.pop(args_list[0])
             self.db.set("NumMod", "infList", infList)
-            await utils.answer(
-                message, 
-                f"❌ Жертва <b><code>{args}</code></b> удалена из списка."
+            await message.reply( 
+                f"❎ Жертва <b><code>{args}</code></b> удалена из списка."
             )
-        elif args_list[0][0] != '@':
-            await utils.answer(message,
-            f'🥱 Вы некорректно ввели ID.'
-            )
+
         else:
             try:
                 user, count = str(args_list[0]), float(args_list[1])
             except Exception:
-                await utils.answer(message, 
-                    f"❎ Данного пользователя нет в списке."
+                await message.reply( 
+                    "❌ Команда введена некорректно."
                     )
                 return
             k = ''
@@ -275,10 +390,10 @@ class BioMod(loader.Module):
                 k += 'k'
             infList[user] = [str(count) + k, vremya]
             self.db.set("NumMod", "infList", infList)
-            await utils.answer(
-                message,
-                f"✅ Жертва <b><code>{user}</code></b> сохранена.\n"
-                f"<b>☣️ {count}{k}</b> био-опыта."
+            await message.reply(
+                self.strings("r.save").format(
+                            user, count, k
+                )
             )
     async def довcmd(self, message):
         """ {args1} {args2 OR reply} \nВведи команду для просмотра аргументов."""
@@ -289,31 +404,13 @@ class BioMod(loader.Module):
             return await utils.answer(
                 message,
                 f""
-                f"<b>🌘 <code>.Дов сет</code> <id|реплай></b> --- Добавить/удалить саппорта (не больше 20).\n"
-                f"[{', '.join([f'<code>@{i}</code>' for i in filter_and_users['users']])}]\n"
+                f"<b>🌘 <code>.Дов сет</code> <id|реплай></b> --- <b>Добавить/удалить саппорта.</b>\n"
+                f"[{', '.join([f'<code>@{i}</code>' for i in filter_and_users['users']])}]\n\n"
                 f"<b><code>🌘 .Дов ник</code> <ник></b> --- <b>Установить ник</b>.\n<i>Например: <b><code>.Дов ник </i></code>Влад</b></i>.\n"
-                f"<b>🔰 Ваш ник: <code>{filter_and_users['filter'] or '❌ Не установлен.'}</code></b>\n"
+                f"<b>🔰 Ваш ник: <code>{filter_and_users['filter'] or '❌ Не установлен.'}</code></b>\n\n"
                 f"<b><code>🌘 .Дов пуск</code></b> --- <b>Запустить/Остановить</b>.\n"
                 f"<b>{'✅ Запущен.' if filter_and_users['status'] else '❌ Остановлен.'}.</b>\n\n"
-                f"<b>❔ Как использовать:</b>\n"
-                f"<b><ник></b> <code>бей</code></b> | <b><code>кус</code></b>ьай |<b><code>зарази</code></b>ть " # 🔽
-                f"| <b><code>еб</code></b>и | <b><code>уеби</code></b> <b>(1-10) <Ссылка/реплай></b>.\n"
-                f"<b><ник> <code><b>Вакцин</b></code>ау | <code><b>лечись</code></b> |" # 🔽
-                f"<code><b>ва</code></b>кцина</b> | <code><b>хи</code></b>лльсяйинг\n"
-                f"<b><ник></b> <code>жертвы</code> | <code>ежа</code><b>\n"
-                f"<b><ник> </b><code>бол</code>езни\n"
-                f"<b><ник> </b><code>цен</code>аз\n"
-                f"<b><ник> </b><code>лаб</code>уа | <code>статы</code>\n"
-                f"<b><ник> </b><code>уведы</code>\n"
-                f"<b><ник> </b><code>-вирусы</code>\n\n"
-                f"<b>〽️ Апгрейд навыков:</b>\n"
-                f"<b><ник> <навык> (0-5)</b> или\n<b><ник> <навык> чек (0-5)</b>\n"
-                f"<i>Например: <b><ник> квалификация 4</b>\n" 
-                f"(улучшает квалификацию учённых на 4 ур.)</i>\n\n"    
-                f"<b>〽️ Доступные навыки:</b>\n"
-                f"<b>🧪 <code>Патоген</code> (паты)</b>\n<b>👨‍🔬 <code>Квалификация</code> (квала)</b>\n"
-                f"<b>🦠 <code>Заразность</code> (зз)</b>\n<b>🛡 <code>Иммунитет</code> (иммун)</b>\n"
-                f"<b>☠️ <code>Летальность</code> (летал)</b>\n<b>🕵️‍♂️ <code>Безопасность</code> (сб)</b>"
+
             )
         args = args.split(' ', maxsplit=1)
         if len(args) == 1 and not reply and args[0] != 'пуск': # 
@@ -328,17 +425,15 @@ class BioMod(loader.Module):
             if user_id in filter_and_users['users']:
                 filter_and_users['users'].remove(user_id)
                 await utils.answer(message, f"❎ Саппорт <b><code>{user_id}</code></b> удалён.")
-            elif len(filter_and_users['users']) <= 20:
+            elif user_id not in filter_and_users['users']:
                 filter_and_users['users'].append(user_id)
                 await utils.answer(message, f"✅ Саппорт <b><code>{user_id}</code></b> добавлен!")
-            else:
-                return await utils.answer(message, '❌ Превышен лимит в 20 человек.')
             return self.db.set("NumMod", "numfilter", filter_and_users)
         elif args[0] == 'ник':
             try:
                 filter_and_users['filter'] = args[1].lower().strip()
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await utils.answer(message, f"✅ Ник <b><code>{args[1]}</code></b> успешно установлен!")
+                return await utils.answer(message, f"🔰 Ник <b>{args[1]}</b> установлен!")
             except Exception:
                 return await utils.answer(message, "<b>📝 Введите ник.</b>")
         elif args[0] == 'пуск':
@@ -364,102 +459,167 @@ class BioMod(loader.Module):
             'users'] or message.is_private: return
         text = message.raw_text.lower()
         if not text.startswith(filter_and_users['filter']): return
-        if send_mesа := re.search(
+        nul = ""
+        if self.config["Доступ к команде заразить"] == True:  
+            if send_mesа := re.search(
                 r"(?P<z>бей\s|кус[ьайни]{,3}\s|зарази[тьть]{,3}\s|еб[ниажшь]{,3}\s|уеб[иаошть]{,3}\s|опуст[и]{,2}|организуй горячку\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
+                text
+            ):
+                send_mesа = send_mesа.groupdict()
+                send_mesа['link'], send_mesа['id'] = '@' + send_mesа['id'] if send_mesа['id'] else send_mesа['link'], ''
+                send_mesа['z'] = '/заразить '
+                send_mesа['lvl'] = send_mesа['lvl'] or ''
+                mes = ''.join(send_mesа.values())
+                await message.reply(mes)
+###### чеки
+        if self.config["Доступ к прокачке"] == True:  
+            if send_mes := re.search(r"(?P<ch>зараз[куаность]{,5} чек[нутьиай]{,4}\s|чек[айниуть]{,4} зараз[куаность]{,5}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['ch'] = '+заразность '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+    
+    
+            elif send_mes := re.search(r"(?P<pat>пат[огены]{,5} чек[айниуть]\s|чек[айниуть]{,4} пат[огены]{,5}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['pat'] = '+патоген '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<let>летал[каьностьу]{,5} чек[айниуть]{,4}\s|чек[айниуть]{,4} летал[каьностьу]{,5}\s)(?P<lvl>[1-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['let'] = '+летальность '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<kvala>квал[лаификацияу]{,8} чек[айниуть]{,4}\s|разраб[откау]{,4} чек[айниуть]{,4}\s|чек[айниуть]{,4} разраб[откау]{,4}\s|чек[айниуть]{,4} квал[улаификация]{,8}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['kvala'] = '+квалификация '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<imun>чек[айниуть]{,4} иммун[еитеткау]{,4}\s|чек[айниуть]{,4} имун[еитеткау]{,4}\s|имун[еитеткау]{,4} чек[айниуть]{,4}\s|иммун[еитеткау]{,4} чек[айниуть]{,4}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['imun'] = '+иммунитет '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<sb>сб чек[айниуть]{,4}\s|безопасно[сть]{,3} чек[айниуть]{,4}\s|служб[ау]{,2} чек[айниуть]{,4}\s|чек[айниуть]{,4} служб[ау]{,2}\s|чек[айниуть]{,4} безопасно[сть]{,3}\s|чек[айниуть]{,4} сб\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['sb'] = '+безопасность '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+#### кач    алки
+            elif send_mes := re.search(r"(?P<zar>зараз[уканость]{,5}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['zar'] = '++заразность '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<pat>пат[огены]{,5}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['pat'] = '++патоген '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<let>летал[укаьность]{,5}\s)(?P<lvl>[1-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['let'] = '++летальность '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<kvala>квал[улаификация]{,8}\s|разраб[откау]{,4}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['kvala'] = '++квалификация '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<imun>иммун[уеитетка]{,4}|имун[уеитетка]{,4}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['imun'] = '++иммунитет '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            elif send_mes := re.search(r"(?P<sb>сб\s|безопасно[сть]{,3}\s|служб[ау]{,2}\s)(?P<lvl>[0-5]+)", text):
+                send_mes = send_mes.groupdict()
+                send_mes['sb'] = '++безопасность '
+                send_mes['lvl'] = send_mes['lvl'] or ''
+                mes = ''.join(send_mes.values())
+                await message.reply(mes)
+            
+        if self.config["Доступ к болезням"] == True:  
+            if re.search(r"бол[езьни]{,5}", text):
+                await message.reply('/мои болезни')
+        
+        if self.config["Доступ к жертвам"] == True:  
+            if re.search(r"жертв[ыау]{,2}|еж[ау]{,2}", text):
+                await message.reply('/мои жертвы')
+
+        if self.config["Доступ к вирусам"] == True:  
+            if re.search(r"-вирус[ыа]{,2}", text):
+                await message.respond('-вирусы')
+            if re.search(r"увед[ыаомления]{,8}", text):
+                await message.reply('+вирусы')
+        
+        if self.config["Доступ к хиллингу"] == True:    
+            if re.search(r"вак[цинау]{,3}|леч[ись]{,2}|хи[лльсяйинг]{,2}|лек[арство]{,2}", text):
+                await message.respond('/купить вакцину')
+            if re.search(r"цен[ау]{,2}|вч[ек]{,2}", text):
+                await message.reply('<i>купить вакцину</i>')
+        
+        if self.config["Доступ к лабе"] == True:
+            if re.search(r"%лаб[уа]{,2}|/лаб[уа]{,2}|#лаб[уа]{,2}", text):
+                await message.reply('👇')
+                await message.respond('лаба')
+
+#######################################################
+        if self.config["Доступ к зарлисту"] == True:      
+            if re.search(r"(?P<zarlist>зз\s)(?P<link>@[0-9a-z_]+|tg://openmessage\?user_id=[0-9]+)",
                 text):
-            send_mesа = send_mesа.groupdict()
-            send_mesа['link'], send_mesа['id'] = '@' + send_mesа['id'] if send_mesа['id'] else send_mesа['link'], ''
-            send_mesа['z'] = '/заразить '
-            send_mesа['lvl'] = send_mesа['lvl'] or ''
-            mes = ''.join(send_mesа.values())
-            await message.reply(mes)
-####### чеки
-        elif send_mes := re.search(r"(?P<ch>зараз[уканость]{,5} чек[айниуть]{,4}\s|зз чек[айниуть]{,4}\s|чек[ниуть]{,4} зз\s|чек[айниуть]{,4} зараз[куаность]{,5}\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['ch'] = '+заразность '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<pat>пат[огены]{,5} чек[айниуть]\s|чек[айниуть]{,4} пат[огены]{,5}\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['pat'] = '+патоген '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<let>летал[каьностьу]{,5} чек[айниуть]{,4}\s|чек[айниуть]{,4} летал[каьностьу]{,5}\s)(?P<lvl>[1-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['let'] = '+летальность '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<kvala>квал[лаификацияу]{,8} чек[айниуть]{,4}\s|разраб[откау]{,4} чек[айниуть]{,4}\s|чек[айниуть]{,4} разраб[откау]{,4}\s|чек[айниуть]{,4} квал[улаификация]{,8}\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['kvala'] = '+квалификация '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<imun>чек[айниуть]{,4} иммун[еитеткау]{,4}\s|чек[айниуть]{,4} имун[еитеткау]{,4}\s|имун[еитеткау]{,4} чек[айниуть]{,4}\s|иммун[еитеткау]{,4} чек[айниуть]{,4}\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['imun'] = '+иммунитет '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<sb>сб чек[айниуть]{,4}\s|безопасно[сть]{,3} чек[айниуть]{,4}\s|служб[ау]{,2} чек[айниуть]{,4}\s|служб[ау]{,2} безопасно[стиь] чек[айниуть]{,4}|чек[айниуть]{,4} служб[ау]{,2} безопасно[стиь]\s|чек[айниуть]{,4} служб[ау]{,2}\s|чек[айниуть]{,4} безопасно[сть]{,3}\s|чек[айниуть]{,4} сб\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['sb'] = '+безопасность '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<zar>зараз[уканость]{,5}\s|зз\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['zar'] = '++заразность '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<pat>пат[огены]{,5}\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['pat'] = '++патоген '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<let>летал[укаьность]{,5}\s)(?P<lvl>[1-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['let'] = '++летальность '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<kvala>квал[улаификация]{,8}\s|разраб[откау]{,4}\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['kvala'] = '++квалификация '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<imun>иммун[уеитетка]{,4}|имун[уеитетка]{,4}\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['imun'] = '++иммунитет '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        elif send_mes := re.search(r"(?P<sb>сб\s|безопасно[сть]{,3}\s|служб[ау]{,2} безопасно[стиь]{,3}\s)(?P<lvl>[0-5]+)", text):
-            send_mes = send_mes.groupdict()
-            send_mes['sb'] = '++безопасность '
-            send_mes['lvl'] = send_mes['lvl'] or ''
-            mes = ''.join(send_mes.values())
-            await message.reply(mes)
-        if re.search(r"бол[езьни]{,2}", text):
-            await message.reply('/мои болезни')
-        if re.search(r"жертв[ыау]{,2}|еж[а]{,2}", text):
-            await message.reply('/мои жертвы')
-        if re.search(r"стат[ыа]{,2}|лаб[уа]{,2}", text):
-            await message.reply('/лаю')
-        if re.search(r"цен[аз]{,2}", text):
-            await message.reply('купить вакцину')
-        if re.search(r"увед[ыаомления]{,2}", text):
-            await message.reply('+вирусы')
-        if re.search(r"-вирус[ыа]{,2}", text):
-            await message.respond('-вирусы')
-        elif re.search(r"вак[цинау]{,2}|лечись|хи[лльсяйинг]{,2}", text):
-            await message.respond('/купить вакцину')
+                infList = self.db.get("NumMod", "infList")
+                timezone = "Europe/Kiev"
+                vremya = datetime.now(pytz.timezone(timezone)).strftime("%d.%m")
+                with contextlib.suppress(Exception):
+                    text_list = text.split(' ', maxsplit=2)    
+                if text_list[2] in infList:
+                    user = infList[text_list[2]]
+                    await message.reply(
+                        self.strings("search").format(
+                            text_list[2], user[0], user[1]
+                        )
+                    )
+                if text_list[2] not in infList:
+                    await message.reply(
+                        self.strings("nf")
+                    )
+    
+            if re.search(r"ж", text):
+                reply = await message.get_reply_message()
+                infList = self.db.get("NumMod", "infList")
+                timezone = "Europe/Kiev"
+                vremya = datetime.now(pytz.timezone(timezone)).strftime("%d.%m")
+                try:
+                    rid = '@' + str(reply.sender_id)
+                except AttributeError: pass
+                if not reply: return
+                if rid in infList:
+                    user = infList[rid]
+                    await message.reply(
+                        self.strings("search").format(
+                            rid, user[0], user[1]
+                        )
+                    )              
+                        
+                elif rid not in infList:
+                        await message.reply(
+                            self.strings("nf")
+                        )  
+    
+########    ###############################################
+
+
 ###     
     async def гcmd(self, message):
         " [arg] [arg] [arg]....\nВыполняет команду /ид по реплаю\n Аргументом являются числа и первые символы строки. "
@@ -468,12 +628,16 @@ class BioMod(loader.Module):
         count_st = 0
         count_hf = 0
         if not reply:
-            await message.respond('❌ Нет реплая.')
+            await message.reply(
+                self.strings("not_reply")
+            )
             return
         args = utils.get_args_raw(message)
         list_args=[]
         if not args:
-            await message.edit('❌ Нет аргументов')
+            await message.reply(
+                self.strings("not_args")
+            )
             return
         for i in args.split(' '):
             if '-' in i:
@@ -515,36 +679,205 @@ class BioMod(loader.Module):
                             break
             await asyncio.sleep(3)
         if not count_st:
-            await message.edit('❌ Не найдено совпадение в начале строк с аргументами.')
+            await message.reply('❌ Не найдено совпадение в начале строк с аргументами.')
         elif not count_hf:
-            await message.edit('❌ Ссылка не найдена.')
-        elif len(list_args) >= 3:
+            await message.reply('❌ Ссылка не найдена.')
+        elif len(list_args) >= 5:
             await message.respond("<b>✅ Id'ы успешно извлечены.</b>" )
-            await asyncio.sleep(3)
+            await asyncio.sleep(3.3)
+
     async def иcmd(self, message):
-        "Чекает все айди по реплаю."
+        """Чекает все айди по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
         reply = await message.get_reply_message()
-        json = JSON.loads(reply.to_json())
-        for i in range(0, len(reply.entities) ):
+        exlist = self.db.get("NumMod", "exUsers")
+        if not reply:
+            await message.reply(
+                self.strings("not_reply")
+            )
+            return
+  
+        for i in range(len(reply.entities)):
             try:
+                json = JSON.loads(reply.to_json())
                 link = json["entities"][i]["url"]
                 if link.startswith('tg'):
-                    list = []
+                    users = '@' + link.split('=')[1]
+                    if users in exlist:
+                        await message.reply(f'/id <code>{users}</code>')
+                    else:
+                        await message.reply(f'/id <code>{users}</code>')
+                elif link.startswith('https://t.me'):
+                    a = '@' 
+                    if a in exlist:
+                        await message.reply(f'/id <code>{a}</code>')
+                    else:
+                        await message.reply(f'/id <code>{a}</code>')
+                else:
+                    await message.reply('🤔 не могу найти ебанные иды')
+            except Exception:
+                await message.reply("/id " + '<code>' + reply.raw_text[
+                                              json["entities"][i]["offset"]:json["entities"][i]["offset"] +
+                                                                            json["entities"][i]["length"]] + '</code>')
+            await asyncio.sleep(3.3)
+        await message.delete()
+    async def бcmd(self, message):
+        """Используй ответом на биотопы/жертвы и т.п"""
+        bt, bch, bk, btz, bchz, ezha, bol = "🔬 ТОП ЛАБОРАТОРИЙ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:","🔬 ТОП ЛАБОРАТОРИЙ БЕСЕДЫ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:","🔬 ТОП КОРПОРАЦИЙ ПО ЗАРАЖЕНИЯМ:","🔬 ТОП БОЛЕЗНЕЙ:","🔬 ТОП БОЛЕЗНЕЙ БЕСЕДЫ:","🦠 Список больных вашим патогеном:","🤒 Список ваших болезней:"
+        reply = await message.get_reply_message()
+        if not reply:
+            await message.edit(
+                self.strings("not_reply")
+               )
+            return
+        a = reply.text
+        if bt not in a and bch not in a and bk not in a and btz not in a and bchz not in a and ezha not in a and bol not in a:
+            await message.reply(
+                self.strings("hueta")
+            )
+            return 
+        b = reply.raw_text.splitlines() 
+        b.pop(0)
+        hh = []
+        for i in b:
+            try:
+                hh.append(i.split('|')[1])
+            except: pass
+        json = JSON.loads(reply.to_json())
+        sms = ''
+        count = 1
+        for i in range(0, len(reply.entities) ):
+            try:
+                exp = hh[i]
+            except:
+                exp = i
+            link = json["entities"][i]["url"]
+            try:
+                if link.startswith('tg'):
+                    bla = []
                     for i in link.split('='):
-                        list.append(i)
-                    await message.reply('/id <code>@' + list[1] + '</code>')
+                        bla.append(i)
+                    b = await message.client.get_entity(int(bla[1]))
+                    sms+=f'{str(count)}. <b>{b.first_name}</b> - <code>@{b.id}</code> | <u>{exp}</u>\n'
                 elif link.startswith('https://t.me'):
                     a ='@' + str(link.split('/')[3])
-                    await message.reply(f'/id <code>{a}</code>')
+                    sms+=f'{str(count)}. <code>{a}</code> | <u>{result}</u>\n'
                 else:
-                    await message.reply('🤔 Что за хуета?')
+                    sms+='{str(count)}. что за хуета?\n'
             except:
-                await message.reply("/id " + "<code>" + reply.raw_text[json["entities"][i]["offset"]:json["entities"][i]["offset"]+json["entities"][i]["length"]] + "</code>" )
-            await asyncio.sleep(3)
-        await message.delete()
+                if link.startswith('https://t.me'):
+                    a ='@' + str(link.split('/')[3])
+                    sms+=f'{str(count)}. <code>{a}</code> | <u>{exp}</u> \n'
+                elif link.startswith('tg'):
+                    bla = []
+                    for i in link.split('='):
+                        bla.append(i)
+                    sms+=f'{str(count)}. <code>@{bla[1]}</code> | <u>{exp}</u> \n'
+            count += 1
+
+
+        await self.inline.form(
+            sms,
+            reply_markup={
+                            "text": "👆 Список слабиков",
+                            "callback": self.inline__close,
+            },
+            message=message,
+            disable_security=False
+        )   
+### помощь
+    async def bhelpcmd(self, message: Message):
+        """Выдает помощь по модулю"""
+        args = utils.get_args_raw(message)
+        reply = await message.get_reply_message(
+        )
+        if not args:
+            await self.inline.form(
+                self.strings(
+                    "guide"
+                ),
+                reply_markup={
+                                "text": "Закрыть",
+                                "callback": self.inline__close,
+                },
+                message=message
+            )
+#######################   
+        if 'дов' in args:
+            nnik = self.db.get("NumMod", "numfilter", {'users': [], 'filter': None, 'status': False})
+            nik = nnik['filter'] or 'ник' 
+            await self.inline.form(
+                self.strings("guidedov").format(
+                    nik
+                ),
+                reply_markup={
+                                "text": "Закрыть",
+                                "callback": self.inline__close,
+
+                },
+                message=message
+            )   
 
 
 
+
+
+
+    async def inline__close(self, call) -> None:
+        await call.delete()
+
+
+    def __init__(self):
+        self.config = loader.ModuleConfig(
+            loader.ConfigValue(
+                "Доступ к лабе",
+                False,
+                "Доступ к лабе через доверку",
+                validator=loader.validators.Boolean(),
+            ),
+            loader.ConfigValue(
+                "Доступ к команде заразить",
+                True,
+                "Доступ к команде заражения через доверку",
+                validator=loader.validators.Boolean(),
+            ),
+            loader.ConfigValue(
+                "Доступ к прокачке",
+                False,
+                "Доступ к прокачке навыков через доверку",
+                validator=loader.validators.Boolean(),
+            ),
+            loader.ConfigValue(
+                "Доступ к зарлисту",
+                False,
+                "Доступ к зарлисту через доверку",
+                validator=loader.validators.Boolean(),
+            ),
+            loader.ConfigValue(
+                "Доступ к жертвам",
+                True,
+                "Доступ к жертвам через доверку",
+                validator=loader.validators.Boolean(),
+            ),
+            loader.ConfigValue(
+                "Доступ к болезням",
+                True,
+                "Доступ к болезням через доверку",
+                validator=loader.validators.Boolean(),
+            ),
+
+            loader.ConfigValue(
+                "Доступ к вирусам",
+                False,
+                "Доступ к установке вирусов через доверку",
+                validator=loader.validators.Boolean(),
+            ),
+            loader.ConfigValue(
+                "Доступ к хиллингу",
+                True,
+                "Доступ к покупке вакцины",
+                validator=loader.validators.Boolean(),
+            )
+        )
 
 
 
