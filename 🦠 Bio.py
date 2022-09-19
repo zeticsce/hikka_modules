@@ -359,8 +359,8 @@ class BioMod(loader.Module):
                 args
             )
         )
-    async def злcmd(self, message):
-        """ Список ваших заражений.\n.зл {@id/user} {count} {args}\nДля удаления: .зл {@id/user}\nАргументы:\nк -- добавить букву k(тысяч) к числу.\nо -- поиск по ид'у/юзеру.\nр -- добавлению в список по реплаю. """
+    async def зарcmd(self, message):
+        """ Список ваших заражений.\n.зар {@id/user} {count} {args}\nДля удаления: .зар {@id/user}\nАргументы:\nк -- добавить букву k(тысяч) к числу.\nф -- поиск по ид'у/юзеру.\nр -- добавлению в список по реплаю. """
         args = utils.get_args_raw(message)
         infList = self.db.get("NumMod", "infList")
         timezone = "Europe/Kiev"
@@ -423,7 +423,7 @@ class BioMod(loader.Module):
                 self.strings("clrzar")
             )
 
-        elif 'о' in args.lower():
+        elif 'ф' in args.lower():
             reply = await message.get_reply_message()
             if not reply:            
             
