@@ -1,4 +1,4 @@
-__version__ = (2, 0, 0)
+__version__ = (2, 0, 1)
 # #спиздилшапкуухикари
 #           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -575,7 +575,7 @@ class BioMod(loader.Module):
             try:
                 filter_and_users['filter'] = args[1].lower().strip()
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await self.inline.form(
+                return await message.reply(
                     self.strings("nick_add").format(
                         args[1]
                     )

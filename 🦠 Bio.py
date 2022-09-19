@@ -1,4 +1,4 @@
-__version__ = (2, 0, 0)
+__version__ = (2, 0, 1)
 # #спиздилшапкуухикари
 #           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -377,7 +377,7 @@ class BioMod(loader.Module):
             sms = ''.join(
                 f'<b>• <code>{key}</code>  <code>{value[0]}</code> [<i>{value[1]}</i>]</b>\n' for key, value in
                 infList.items())
-            await message.edit(sms)
+            await utils.answer(message, sms)
             return
         ##
         ###
@@ -575,7 +575,7 @@ class BioMod(loader.Module):
             try:
                 filter_and_users['filter'] = args[1].lower().strip()
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await self.inline.form(
+                return await message.reply(
                     self.strings("nick_add").format(
                         args[1]
                     )
@@ -603,7 +603,7 @@ class BioMod(loader.Module):
 
         else:
             return await message.reply(
-                self.strings("wrong_args")
+                self.strings("dov.wrong_args")
             )
 
     
