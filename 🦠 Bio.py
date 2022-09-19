@@ -1,5 +1,5 @@
 __version__ = (2, 0, 0)
-
+# #спиздилшапкуухикари
 #           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
 #           ░░███╔═╝█████╗░░░░░██║░░░██║██║░░╚═╝╚█████╗░██║░░╚═╝█████╗░░
@@ -21,6 +21,7 @@ import re
 import telethon
 from telethon.tl.types import MessageEntityTextUrl
 from telethon.tl.types import Message
+from telethon.tl.functions.users import GetFullUserRequest
 import json as JSON
 from datetime import datetime, date, time
 import logging
@@ -29,7 +30,7 @@ from ..inline.types import InlineCall
 
 @loader.tds
 class BioMod(loader.Module):
-    """Ваша вторая рука в биовойнах)\nНОВАЯ КОМАНДА .б"""
+    """Ваша вторая рука в биовойнах)\n"""
     strings = {
         
         "name": "Bio",
@@ -60,6 +61,7 @@ class BioMod(loader.Module):
             "<b>🆔:</b> <code>@{}</code>",
         "myid": "<b>My 🆔:</b> <code>@{}</code>",
         
+
         "guidedov":    
             "<b>❔ Как использовать доверку:</b>\n"
             "\n<b>{0}</b>  <code>бей</code> | <code>кус</code>[ьайни] | <code>зарази</code>[тьть] " # 🔽
@@ -78,15 +80,51 @@ class BioMod(loader.Module):
             "〽️ <b>Доступные навыки:</b>\n"
             "🧪 Патоген (<b>пат</b> [огены])\n👨‍🔬 Квалификация (<b>квал</b> [ификацияула] | <b>разраб</b> [откау])\n"
             "🦠 Заразность (<b>зз</b> | <b>зараз</b> [аностьку])\n🛡 Иммунитет (<b>иммун</b> [итеткау])\n"
-            "☠️ Летальность (<b>летал</b> [ьностькау])\n🕵️‍♂️ Безопасность (<b>сб</b> | <b>служб</b> [ау] | <b>безопасно</b> [сть])",
+            "☠️ Летальность (<b>летал</b> [ьностькау])\n🕵️‍♂️ Безопасность (<b>сб</b> | <b>служб</b> [ау] | <b>безопасно</b> [сть])\n\n"
+            "<b>🔎 Поиск жертв в зарлисте:</b>\n"
+            "<b>{0}  зз [ @id ]</b> или\n"
+            "<b>{0}  ж [ реплай ]</b>",
 
-        "guidehz":
-            "",
-        
-        "guide":
+        "dov": 
+            "<b>🌘 <code>.Дов сет</code> [ id|реплай ]</b> --- <b>Добавить/удалить саппорта.</b>\n"
+            "<i>   ✨ Доверенные пользователи:</i>\n"
+            "{0}\n\n"
+            "<b>🌘 <code>.Дов ник</code> ник</b> --- <b>Установить ник</b>.\n <i>Например: <b><code>.Дов ник {3}</code></b></i>.\n"
+            "<b>   🔰 Ваш ник: <code>{1}</code></b>\n\n"
+            "<b>🌘 <code>.Дов пуск</code></b> --- <b>Запустить/Остановить</b>.\n"
+            "<b>   {2}</b>\n"
+            "<i><b>Доступ открыт к:</b></i>\n{4}",
+
+        "user_rm": "❎ Саппорт <b><code>{}</code></b> удалён.",
+        "user_add": "<emoji document_id=5212932275376759608>✅</emoji> Саппорт <b><code>{}</code></b> добавлен!",
+        "wrong_nick": "<b>📝 Введите ник.</b>",
+        "nick_add": "🔰 Ник <b>{}</b> установлен!",
+        "dov_start": "<b><emoji document_id=5212932275376759608>✅</emoji> Успешно запущено!</b>",
+        "dov_stop": "<b>❎ Успешно остановлено.</b>",
+        "dov.wrong_args": 
+            "<b><emoji document_id=5215273032553078755>❌</emoji> Неизвестный аргумент.</b>\n"
+            "<i>📝 Введите <code>.дов</code> для просмотра команд.</i>",   
+        "wrong_id": "👀 Правильно 🆔 введи, дубина.",
+        "ex": "❎ Исключение: <code>{}</code>",
+        "wrong_ot-do": '<emoji document_id=5215273032553078755>❌</emoji> еблан, Используй <b>правильно</b> функцию "от-до".',
+        "no_sargs": "<emoji document_id=5215273032553078755>❌</emoji> Не найдено совпадение в начале строк с аргументами.",
+        "no_link": "<emoji document_id=5215273032553078755>❌</emoji> Ссылка не найдена.",
+        "too_much_args": "<emoji document_id=5215273032553078755>❌</emoji> Кол-во аргументов <b>больше</b> одного, либо начинается <b>не</b> со знака <code>@</code>",
+        "no_zar_reply": "<emoji document_id=5215273032553078755>❌</emoji> Нет реплая на сообщение ириса о заражении.",
+        "empty_zar": "<emoji document_id=5215273032553078755>❌</emoji> Список заражений пуст.",
+        "wrong_zar_reply": '<emoji document_id=5215273032553078755>❌</emoji> Реплай <b>не</b> на сообщение ириса о заражении "<b>...подверг заражению...</b>"',
+        "wrong_cmd": "<emoji document_id=5215273032553078755>❌</emoji> Команда введена некорректно.",
+        "empty_ex": "<emoji document_id=5215273032553078755>❌</emoji> Cписок исключений пуст.",
+        "tids": "<b><emoji document_id=5212932275376759608>✅</emoji> Id'ы успешно извлечены.</b>",
+        "tzar": "<emoji document_id=5212932275376759608>✅</emoji> Заражения завершены.",
+        "clrex": "❎ Список исключений очищен.",
+        "zar_rm": "❎ Жертва <b><code>{}</code></b> удалена из списка.",
+        "exadd": "✅ Пользователь <code>{}</code> в исключениях.",
+        "exrm": "❎ Пользователь <code>{}</code> удален.",
+        "clrzar": "✅ Зарлист <b>очищен</b>.",
+        "guide":""
             f"<b>Помощь по модулю BioHelper:</b>\n\n"
-            f"<code>.bhelp дов</code> 👈 Помощь по доверке "
-            f"<code>.bhelp </code>"
+            f"<code>.biohelp дов</code> 👈 Помощь по доверке "
 
     }
     async def client_ready(self, client, db):
@@ -160,7 +198,9 @@ class BioMod(loader.Module):
                 try:
                     list_args.extend(str(x) for x in range(int(ot_do[0]), int(ot_do[1]) + 1))
                 except Exception:
-                    await message.reply('❌ еблан, Используй <b>правильно</b> функцию "от-до".')
+                    await message.reply(
+                        self.strings("wrong_ot-do")
+                    )
                     return
             else:
                 list_args.append(i)
@@ -178,25 +218,41 @@ class BioMod(loader.Module):
                         if link.startswith('tg'):
                             users = '@' + link.split('=')[1]
                             if users in exlist:
-                                await message.reply(f'❎ Исключение: <code>{users}</code>')
+                                await message.reply(
+                                    self.strings("ex").format(
+                                    users
+                                    )
+                                )
                             else:
                                 await message.reply(f'/заразить {users}')
                         elif link.startswith('https://t.me'):
                             a = '@' + str(link.split('/')[3])
                             if a in exlist:
-                                await message.reply(f'❎ Исключение: <code>{a}</code>')
+                                await message.reply(
+                                    self.strings("ex").format(
+                                    a
+                                    )
+                                )
                             else:
                                 await message.reply(f'/заразить {a}')
                         else:
-                            await message.reply('🤔 Что за хуета?')
+                            await message.reply(
+                                self.strings("hueta")
+                            )
                         break
             await asyncio.sleep(3.3)   
         if not count_st:
-            await message.reply('❌ Не найдено совпадение в начале строк с аргументами.')
+            await message.reply(
+                self.strings("no_sargs")
+            )
         elif not count_hf:
-            await message.reply('❌ Ссылка не найдена.')
+            await message.reply(
+                self.strings("no_link")
+            )
         elif len(list_args) >= 5:
-            await message.reply('✅ Заражения завершены.')
+            await message.reply(
+                self.strings("tzar")
+            )
     async def оcmd(self, message):
         """Заражает всех по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
         reply = await message.get_reply_message()
@@ -215,38 +271,61 @@ class BioMod(loader.Module):
                     if link.startswith('tg'):
                         users = '@' + link.split('=')[1]
                         if users in exlist:
-                            await message.reply(f'❎ Исключение: <code>{users}</code>')
+                            await message.reply(
+                                    self.strings("ex").format(
+                                    users
+                                    )
+                                )
                         else:
                             await message.reply(f'/заразить {users}')
                     elif link.startswith('https://t.me'):
                         a = '@' 
                         if a in exlist:
-                            await message.reply(f'❎ Исключение: <code>{a}</code>')
+                            await message.reply(
+                                    self.strings("ex").format(
+                                    a
+                                    )
+                                )
                         else:
                             await message.reply(f'/заразить {a}')
                     else:
-                        await message.reply('🤔 Что за хуета?')
+                        await message.reply(
+                            self.strings("hueta")
+                        )
                 except Exception:
-                    await message.reply("/заразить " + reply.raw_text[
-                                                      json["entities"][i]["offset"]:json["entities"][i]["offset"] +
-                                                                                    json["entities"][i]["length"]])
+                    blayt = reply.raw_text[json["entities"][i]["offset"]:json["entities"][i]["offset"] + json["entities"][i]["length"]]
+                    if blayt in exlist:
+                        await message.reply(
+                            self.strings("ex").format(
+                                blayt
+                                )
+                            )
+                    else:
+                        await message.reply("/заразить " + blayt)
                 await asyncio.sleep(3.3)
         
         except TypeError:
             err = "2"
-            await message.reply(
+            await message.edit(
                 self.strings("hueta")
             )
         if err != "2":
             await message.delete()
     async def искcmd(self, message):
-        """Добавляет исключения для команд .з и .о\nИспользуй: .иск {@user/@id}"""
+        """Добавляет исключения для команд .з и .о\nИспользуй: .иск {@user/@id/reply}"""
+        reply = await message.get_reply_message()
         args = utils.get_args_raw(message)
         exlistGet = self.db.get("NumMod", "exUsers")
         exlist = exlistGet.copy()
         if not args:
+            #if reply:
+            #    rid = "@" + str(reply.sender_id)
+
+
             if len(exlist) < 1:
-                await message.edit('❌ Cписок исключений пуст.')
+                await message.reply(
+                    self.strings("empty_zar")
+                )
                 return
             exsms = ''.join(f'<b>{count}.</b> <code>{i}</code>\n' for count, i in enumerate(exlist, start=1))
             await utils.answer(message, exsms)
@@ -255,21 +334,31 @@ class BioMod(loader.Module):
         if args == 'clear':
             exlist.clear()
             self.db.set("NumMod", "exUsers", exlist)
-            await message.respond(' ❎ Список исключений очищен.')
+            await message.reply(
+                self.strings("clrex")
+            )
             return
         if len(args.split(' ')) > 1 or args[0] != '@':
-            await message.respond(
-                '❌ Кол-во аргументов <b>больше</b> одного, либо начинается <b>не</b> со знака <code>@</code>'
+            await message.reply(
+                self.strings("too_much_args")
             )
             return
         if args in exlist:
             exlist.remove(args)
             self.db.set("NumMod", "exUsers", exlist)
-            await message.edit(f'❎ Игрок <code>{args}</code> удален.')
+            await message.edit(
+                self.strings("exrm").format(
+                    args
+                )
+            )
             return
         exlist.append(args)
         self.db.set("NumMod", "exUsers", exlist)
-        await message.edit(f'✅ Игрок <code>{args}</code> в исключениях.')
+        await message.edit(
+            self.strings("exadd").format(
+                args
+            )
+        )
     async def зарcmd(self, message):
         """ Список ваших заражений.\n.зар {@id/user} {count} {args}\nДля удаления: .зар {@id/user}\nАргументы:\nк -- добавить букву k(тысяч) к числу.\nф -- поиск по ид'у/юзеру.\nр -- добавлению в список по реплаю. """
         args = utils.get_args_raw(message)
@@ -281,12 +370,14 @@ class BioMod(loader.Module):
         ###
         if not args:
             if not infList:
-                await utils.answer(message, "❌ Список заражений пуст.")
+                await message.edit(
+                    self.strings("empty_zar")
+                )
                 return
             sms = ''.join(
                 f'<b>• <code>{key}</code>  <code>{value[0]}</code> [<i>{value[1]}</i>]</b>\n' for key, value in
                 infList.items())
-            await utils.answer(message, sms)
+            await message.edit(sms)
             return
         ##
         ###
@@ -294,14 +385,18 @@ class BioMod(loader.Module):
             reply = await message.get_reply_message()
             
             if not reply:
-                return await utils.answer(message, '❌ Нет реплая на сообщение ириса о заражении.')
+                return await message.reply(
+                    self.strings("no_zar_reply")
+                )
             ##
 
             trueZ = 'подверг заражению'
             trueZ2 = 'подвергла заражению' # да, я еблан)
             text = reply.text
             if trueZ not in reply.text and trueZ2 not in reply.text:
-                await message.reply('❌ Реплай <b>не</b> на сообщение ириса о заражении "<b>...подверг заражению...</b>"')
+                await message.reply(
+                    self.strings("wrong_zar_reply")
+                )
             else:  # ☣
                 try:
                     ept = ""
@@ -325,7 +420,7 @@ class BioMod(loader.Module):
             infList.clear()
             self.db.set("NumMod", "infList", infList)
             await message.reply(
-            "✅ Зарлист <b>очищен</b>."
+                self.strings("clrzar")
             )
 
         elif 'ф' in args.lower():
@@ -373,17 +468,19 @@ class BioMod(loader.Module):
         elif len(args_list) == 1 and args_list[0] in infList:
             infList.pop(args_list[0])
             self.db.set("NumMod", "infList", infList)
-            await message.reply( 
-                f"❎ Жертва <b><code>{args}</code></b> удалена из списка."
+            await message.reply(
+                self.strings("zar_rm").format(
+                    args
+                )
             )
 
         else:
             try:
                 user, count = str(args_list[0]), float(args_list[1])
             except Exception:
-                await message.reply( 
-                    "❌ Команда введена некорректно."
-                    )
+                await message.reply(
+                    self.strings("wrong_cmd")
+                )
                 return
             k = ''
             if 'к' in args.lower():
@@ -400,57 +497,116 @@ class BioMod(loader.Module):
         args = utils.get_args_raw(message)
         reply = await message.get_reply_message()
         filter_and_users = self.db.get("NumMod", "numfilter", {'users': [], 'filter': None, 'status': False})
-        if not args:
-            return await utils.answer(
-                message,
-                f""
-                f"<b>🌘 <code>.Дов сет</code> <id|реплай></b> --- <b>Добавить/удалить саппорта.</b>\n"
-                f"[{', '.join([f'<code>@{i}</code>' for i in filter_and_users['users']])}]\n\n"
-                f"<b><code>🌘 .Дов ник</code> <ник></b> --- <b>Установить ник</b>.\n<i>Например: <b><code>.Дов ник </i></code>Влад</b></i>.\n"
-                f"<b>🔰 Ваш ник: <code>{filter_and_users['filter'] or '❌ Не установлен.'}</code></b>\n\n"
-                f"<b><code>🌘 .Дов пуск</code></b> --- <b>Запустить/Остановить</b>.\n"
-                f"<b>{'✅ Запущен.' if filter_and_users['status'] else '❌ Остановлен.'}.</b>\n\n"
+        wnik = await self._client(GetFullUserRequest(message.sender_id))
+        ent = wnik.users[0]
+        a = self.config
 
+        dovs = ""
+        if a["Доступ к лабе"] == True:
+            dovs += "лабе, "
+        if a["Доступ к заражениям"] == True:
+            dovs += "заражениям, "
+        if a["Доступ к прокачке"] == True:
+            dovs += "прокачкам, "
+        if a["Доступ к жертвам"] == True:
+            dovs += "жертвам, "
+        if a["Доступ к болезням"] == True:
+            dovs += "болезням, "
+        if a["Доступ к вирусам"] == True:
+            dovs += "установке вирусов, "
+        if a["Доступ к хиллингу"] == True:
+            dovs += "хиллингу, "
+        len_dovs = len(dovs)
+        dovs_accept = dovs[:len_dovs-2]
+
+        dov_users = ', '.join(
+            f'<code>@{i}</code>' for i in filter_and_users['users']
+        )
+        if not args:
+            return await self.inline.form(
+                self.strings("dov").format(
+                    dov_users,
+                    filter_and_users['filter'] or '❌ Не установлен.',
+                    '✅ Запущен.' if filter_and_users['status'] else '❎ Остановлен.',
+                    ent.first_name if len(ent.first_name) <= 12  else "ник",
+                    dovs_accept if dovs_accept != "" else "всё ограничено 👌"
+                ),
+                reply_markup={
+                    "text": "Закрыть",
+                    "callback": self.inline__close,
+
+                },
+                message=message,
+                disable_security=False
             )
         args = args.split(' ', maxsplit=1)
         if len(args) == 1 and not reply and args[0] != 'пуск': # 
             return await utils.answer(message, '🤔 Не могу понять, что за хуета?..')
+        
         elif args[0] == 'сет':
             try:
                 user_id = args[1]
                 if not user_id.isdigit():
-                    return await utils.answer(message, '👀 Правильно 🆔 введи, дубина.')
+                    return await message.reply(
+                        self.strings("wrong_id")
+                    )
+
             except Exception:
                 user_id = str(reply.sender_id)
+            
             if user_id in filter_and_users['users']:
                 filter_and_users['users'].remove(user_id)
-                await utils.answer(message, f"❎ Саппорт <b><code>{user_id}</code></b> удалён.")
+                return await message.reply(
+                    self.strings("user_rm").format(
+                        user_id
+                    )
+                )
             elif user_id not in filter_and_users['users']:
                 filter_and_users['users'].append(user_id)
-                await utils.answer(message, f"✅ Саппорт <b><code>{user_id}</code></b> добавлен!")
+                return await message.reply(
+                    self.strings("user_add").format(
+                        user_id
+                    )
+                )
+
             return self.db.set("NumMod", "numfilter", filter_and_users)
+        
         elif args[0] == 'ник':
             try:
                 filter_and_users['filter'] = args[1].lower().strip()
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await utils.answer(message, f"🔰 Ник <b>{args[1]}</b> установлен!")
+                return await self.inline.form(
+                    self.strings("nick_add").format(
+                        args[1]
+                    )
+                )
             except Exception:
-                return await utils.answer(message, "<b>📝 Введите ник.</b>")
+                return await message.reply(
+                    self.strings("wrong_nick")
+                )
+
+        
         elif args[0] == 'пуск':
             if filter_and_users['status']:
                 filter_and_users['status'] = False
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await utils.answer(message, "<b>❎ Успешно остановлено.</b>")
+                return await message.reply(
+                    self.strings("dov_stop")
+                )
+
             else:
                 filter_and_users['status'] = True
                 self.db.set("NumMod", "numfilter", filter_and_users)
-                return await utils.answer(message, "<b>✅ Успешно запущено!</b>")
+                return await message.reply(
+                    self.strings("dov_start")
+                )
+
         else:
-            return await utils.answer(
-            message,
-            f"<b>❌ Неизвестный аргумент.</b>\n"
-            f"<i>📝 Введите <code>.дов</code> для просмотра команд.</i>"
+            return await message.reply(
+                self.strings("wrong_args")
             )
+
+    
     async def watcher(self, message):
         if not isinstance(message, telethon.tl.types.Message): return
         filter_and_users = self.db.get("NumMod", "numfilter", {'users': [], 'filter': None, 'status': False})
@@ -460,7 +616,7 @@ class BioMod(loader.Module):
         text = message.raw_text.lower()
         if not text.startswith(filter_and_users['filter']): return
         nul = ""
-        if self.config["Доступ к команде заразить"] == True:  
+        if self.config["Доступ к заражениям"] == True:  
             if send_mesа := re.search(
                 r"(?P<z>бей\s|кус[ьайни]{,3}\s|зарази[тьть]{,3}\s|еб[ниажшь]{,3}\s|уеб[иаошть]{,3}\s|опуст[и]{,2}|организуй горячку\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
                 text
@@ -572,7 +728,8 @@ class BioMod(loader.Module):
         if self.config["Доступ к лабе"] == True:
             if re.search(r"%лаб[уа]{,2}|/лаб[уа]{,2}|#лаб[уа]{,2}", text):
                 await message.reply('👇')
-                await message.respond('лаба')
+                await message.respond('/моя лаба')
+
 
 #######################################################
         if self.config["Доступ к зарлисту"] == True:      
@@ -582,7 +739,7 @@ class BioMod(loader.Module):
                 timezone = "Europe/Kiev"
                 vremya = datetime.now(pytz.timezone(timezone)).strftime("%d.%m")
                 with contextlib.suppress(Exception):
-                    text_list = text.split(' ', maxsplit=2)    
+                    text_list = text.split(' ', maxsplit=3)    
                 if text_list[2] in infList:
                     user = infList[text_list[2]]
                     await message.reply(
@@ -594,7 +751,6 @@ class BioMod(loader.Module):
                     await message.reply(
                         self.strings("nf")
                     )
-    
             if re.search(r"ж", text):
                 reply = await message.get_reply_message()
                 infList = self.db.get("NumMod", "infList")
@@ -624,7 +780,7 @@ class BioMod(loader.Module):
     async def гcmd(self, message):
         " [arg] [arg] [arg]....\nВыполняет команду /ид по реплаю\n Аргументом являются числа и первые символы строки. "
         reply = await message.get_reply_message()
-        a = reply.text
+        
         count_st = 0
         count_hf = 0
         if not reply:
@@ -632,6 +788,7 @@ class BioMod(loader.Module):
                 self.strings("not_reply")
             )
             return
+
         args = utils.get_args_raw(message)
         list_args=[]
         if not args:
@@ -639,6 +796,7 @@ class BioMod(loader.Module):
                 self.strings("not_args")
             )
             return
+        a = reply.text
         for i in args.split(' '):
             if '-' in i:
                 ot_do = i.split('-')
@@ -646,7 +804,9 @@ class BioMod(loader.Module):
                     for x in range(int(ot_do[0]),int(ot_do[1])+1):
                         list_args.append(str(x))
                 except:
-                    await message.respond('❌ Используй правильно функцию "от-до".')
+                    await message.reply(
+                        self.strings("ot_do")
+                    )
                     return
             else:
                 list_args.append(i)
@@ -675,15 +835,23 @@ class BioMod(loader.Module):
                             )
                             break
                         else:
-                            await message.reply('🤔 Что за хуета?')
+                            await message.reply(
+                                self.strings("hueta")
+                            )
                             break
             await asyncio.sleep(3)
         if not count_st:
-            await message.reply('❌ Не найдено совпадение в начале строк с аргументами.')
+            await message.reply(
+                self.strings("no_sargs")
+            )
         elif not count_hf:
-            await message.reply('❌ Ссылка не найдена.')
+            await message.reply(
+                self.strings("nolink")
+            )
         elif len(list_args) >= 5:
-            await message.respond("<b>✅ Id'ы успешно извлечены.</b>" )
+            await message.respond(
+                self.strings("tids")
+            )
             await asyncio.sleep(3.3)
 
     async def иcmd(self, message):
@@ -731,7 +899,7 @@ class BioMod(loader.Module):
             return
         a = reply.text
         if bt not in a and bch not in a and bk not in a and btz not in a and bchz not in a and ezha not in a and bol not in a:
-            await message.reply(
+            await message.respond(
                 self.strings("hueta")
             )
             return 
@@ -785,7 +953,7 @@ class BioMod(loader.Module):
             disable_security=False
         )   
 ### помощь
-    async def bhelpcmd(self, message: Message):
+    async def biohelpcmd(self, message: Message):
         """Выдает помощь по модулю"""
         args = utils.get_args_raw(message)
         reply = await message.get_reply_message(
@@ -799,7 +967,8 @@ class BioMod(loader.Module):
                                 "text": "Закрыть",
                                 "callback": self.inline__close,
                 },
-                message=message
+            message=message,
+            disable_security=False
             )
 #######################   
         if 'дов' in args:
@@ -810,21 +979,16 @@ class BioMod(loader.Module):
                     nik
                 ),
                 reply_markup={
-                                "text": "Закрыть",
-                                "callback": self.inline__close,
+                    "text": "Закрыть",
+                    "callback": self.inline__close,
 
                 },
-                message=message
+                message=message,
+                disable_security=False
             )   
-
-
-
-
-
 
     async def inline__close(self, call) -> None:
         await call.delete()
-
 
     def __init__(self):
         self.config = loader.ModuleConfig(
@@ -835,7 +999,7 @@ class BioMod(loader.Module):
                 validator=loader.validators.Boolean(),
             ),
             loader.ConfigValue(
-                "Доступ к команде заразить",
+                "Доступ к заражениям",
                 True,
                 "Доступ к команде заражения через доверку",
                 validator=loader.validators.Boolean(),
