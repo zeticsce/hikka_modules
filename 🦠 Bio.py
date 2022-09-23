@@ -1,16 +1,15 @@
-__version__ = (2, 0, 1)
-# #спиздилшапкуухикари
+__version__ = (2, 1, 0)
+
 #           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
 #           ░░███╔═╝█████╗░░░░░██║░░░██║██║░░╚═╝╚█████╗░██║░░╚═╝█████╗░░
 #           ██╔══╝░░██╔══╝░░░░░██║░░░██║██║░░██╗░╚═══██╗██║░░██╗██╔══╝░░
 #           ███████╗███████╗░░░██║░░░██║╚█████╔╝██████╔╝╚█████╔╝███████╗
 #           ╚══════╝╚══════╝░░░╚═╝░░░╚═╝░╚════╝░╚═════╝░░╚════╝░╚══════
-#                                © Copyright 2022
-#                             https://t.me/zeticsce
-#               
-#                   🔒         Licensed under the GNU AGPLv3
-#                   🌐 https://www.gnu.org/licenses/agpl-3.0.html
+#                              НЕ © Copyright 2022
+#                             https://t.me/zeticsce              
+
+
 # developer of Num: @trololo_1
 # meta developer: @zeticsce
 from .. import loader, utils  # noqa
@@ -19,10 +18,10 @@ import contextlib
 import pytz
 import re
 import telethon
-from telethon.tl.types import MessageEntityTextUrl
-from telethon.tl.types import Message
+from telethon.tl.types import MessageEntityTextUrl, Message
 from telethon.tl.functions.users import GetFullUserRequest
 import json as JSON
+from telethon.errors.rpcerrorlist import FloodWaitError
 from datetime import datetime, date, time
 import logging
 import types
@@ -30,7 +29,7 @@ from ..inline.types import InlineCall
 
 @loader.tds
 class BioMod(loader.Module):
-    """Ваша вторая рука в биовойнах)\n"""
+    """Ваша вторая рука в биовойнах)"""
     strings = {
         
         "name": "Bio",
@@ -54,6 +53,10 @@ class BioMod(loader.Module):
         
         "nf": "<emoji document_id=5215273032553078755>❎</emoji> Жертва не найдена.",
         
+        "no_user": "<emoji document_id=5215273032553078755>❎</emoji> user {} don't exist.",
+
+        "nous": "<emoji document_id=5215273032553078755>❎</emoji> Жертва или пользователь не существует.",
+
         "anf": "<emoji document_id=5215329773366025981>🤔</emoji> а кого искать?..",
 
         "aicmd":
@@ -83,15 +86,16 @@ class BioMod(loader.Module):
             "☠️ Летальность (<b>летал</b> [ьностькау])\n🕵️‍♂️ Безопасность (<b>сб</b> | <b>служб</b> [ау] | <b>безопасно</b> [сть])\n\n"
             "<b>🔎 Поиск жертв в зарлисте:</b>\n"
             "<b>{0}  зз [ @id ]</b> или\n"
-            "<b>{0}  ж [ реплай ]</b>",
+            "<b>{0}  ж [ реплай ]</b>"
+            "                см. <code>{1}config bio</code>",
 
         "dov": 
-            "<b>🌘 <code>.Дов сет</code> [ id|реплай ]</b> --- <b>Добавить/удалить саппорта.</b>\n"
+            "<b>🌘 <code>{5}Дов сет</code> [ id|реплай ]</b> --- <b>Добавить/удалить саппорта.</b>\n"
             "<i>   ✨ Доверенные пользователи:</i>\n"
             "{0}\n\n"
-            "<b>🌘 <code>.Дов ник</code> ник</b> --- <b>Установить ник</b>.\n <i>Например: <b><code>.Дов ник {3}</code></b></i>.\n"
+            "<b>🌘 <code>{5}Дов ник</code> ник</b> --- <b>Установить ник</b>.\n <i>Например: <b><code>.Дов ник {3}</code></b></i>.\n"
             "<b>   🔰 Ваш ник: <code>{1}</code></b>\n\n"
-            "<b>🌘 <code>.Дов пуск</code></b> --- <b>Запустить/Остановить</b>.\n"
+            "<b>🌘 <code>{5}Дов пуск</code></b> --- <b>Запустить/Остановить</b>.\n"
             "<b>   {2}</b>\n"
             "<i><b>Доступ открыт к:</b></i>\n{4}",
 
@@ -122,9 +126,9 @@ class BioMod(loader.Module):
         "exadd": "✅ Пользователь <code>{}</code> в исключениях.",
         "exrm": "❎ Пользователь <code>{}</code> удален.",
         "clrzar": "✅ Зарлист <b>очищен</b>.",
-        "guide":""
-            f"<b>Помощь по модулю BioHelper:</b>\n\n"
-            f"<code>.biohelp дов</code> 👈 Помощь по доверке "
+        "guide":
+            "<b>Помощь по модулю BioHelper:</b>\n\n"
+            "<code>{}biohelp дов</code> 👈 Помощь по доверке"
 
     }
     async def client_ready(self, client, db):
@@ -365,6 +369,7 @@ class BioMod(loader.Module):
         infList = self.db.get("NumMod", "infList")
         timezone = "Europe/Kiev"
         vremya = datetime.now(pytz.timezone(timezone)).strftime("%d.%m")
+        k = ''
         with contextlib.suppress(Exception):
             args_list = args.split(' ')
         ###
@@ -416,7 +421,7 @@ class BioMod(loader.Module):
                     await message.reply(
                         self.strings("nolink")
                     )
-        elif args_list[0] == "clear":
+        elif args_list[0] == "clear84561":
             infList.clear()
             self.db.set("NumMod", "infList", infList)
             await message.reply(
@@ -425,31 +430,62 @@ class BioMod(loader.Module):
 
         elif 'ф' in args.lower():
             reply = await message.get_reply_message()
+
             if not reply:            
             
-                if args_list[0] in infList:
-                    user = infList[args_list[0]]
+                if re.fullmatch(r"@\d{3,10}", args_list[0], flags=re.ASCII):
+                    zhertva = args_list[0]
+
+                if re.fullmatch(r"@\D\w{3,32}", args_list[0], flags=re.ASCII):
+                    try:
+                        get_id = await message.client.get_entity(args_list[0])
+                        get_id = get_id.id
+                        zhertva = "@" + str(get_id)
+                    except:
+                        return await message.reply(
+                            self.strings("no_user").format(
+                                args_list[0]
+                            )
+                        ) 
+
+                if zhertva in infList:
+                    user = infList[zhertva]
                     await message.reply(
                         self.strings("search").format(
-                            args_list[0], user[0], user[1]
+                            zhertva, user[0], user[1]
                         )
                     )
-                if args_list[0] not in infList:
-                    if  '@' not in args:
-                        await message.reply(
-                            self.strings("anf")
-                        )
-                    else:    
-                        await message.reply(
-                            self.strings("nf")
-                        )  
-            if reply:
-                rid = '@' + str(reply.sender_id)  
-                if args_list[0] in infList:
-                    user = infList[args_list[0]]
+                if zhertva not in infList:   
+                    await message.reply(
+                        self.strings("nf")
+                    )  
+
+            if reply: # <- костыль для фикса UnboundLocalError: local variable 'reply' ...
+                rid = '@' + str(reply.sender_id)
+
+                zhertva = "R#C*N("
+
+                if re.fullmatch(r"@\d{3,10}", args_list[0], flags=re.ASCII):
+                    zhertva = args_list[0]
+
+                if re.fullmatch(r"@\D\w{3,32}", args_list[0], flags=re.ASCII):
+                    try:
+                        get_id = await message.client.get_entity(args_list[0])
+                        get_id = get_id.id
+                        zhertva = "@" + str(get_id)
+                    except:
+                        return await message.reply(
+                            self.strings("no_user").format(
+                                args_list
+                            )
+                        )                
+
+
+                if zhertva in infList:
+                    user = infList[zhertva]
                     await message.reply(
                         self.strings("search").format(
-                            args_list[0], user[0], user[1]
+                            zhertva, user[0], user[1]
                         )
                     )                             
                 elif rid in infList:
@@ -463,8 +499,7 @@ class BioMod(loader.Module):
                 elif rid not in infList:
                         await message.reply(
                             self.strings("nf")
-                        )  
-        
+                        )
         elif len(args_list) == 1 and args_list[0] in infList:
             infList.pop(args_list[0])
             self.db.set("NumMod", "infList", infList)
@@ -475,16 +510,33 @@ class BioMod(loader.Module):
             )
 
         else:
+            k = ''
+            pas = 0
             try:
                 user, count = str(args_list[0]), float(args_list[1])
             except Exception:
-                await message.reply(
-                    self.strings("wrong_cmd")
-                )
-                return
-            k = ''
-            if 'к' in args.lower():
-                k += 'k'
+                try:
+                    if "к" in args_list[1] or "k" in args_list[1]:
+                        user = str(args_list[0])
+                        args = str(args_list[1])
+                        len_args = len(args_list[1])
+                        count = args[:len_args-1]
+                        count = float(count)
+                        k += 'k'
+                        pas = 1
+                except: 
+                    return await message.reply(
+                        self.strings("wrong_cmd")
+                    )                
+            if re.fullmatch(r"@\D\w{3,32}", user, flags=re.ASCII):
+                try:
+                    get_id = await message.client.get_entity(user)
+                    get_id = get_id.id
+                    user = "@" + str(get_id)
+                except:
+                    pass              
+            if 'к' in args.lower() and pas == 0 or 'k' in args.lower() and pas == 0:
+                k += "k"     
             infList[user] = [str(count) + k, vremya]
             self.db.set("NumMod", "infList", infList)
             await message.reply(
@@ -492,6 +544,7 @@ class BioMod(loader.Module):
                             user, count, k
                 )
             )
+    
     async def довcmd(self, message):
         """ {args1} {args2 OR reply} \nВведи команду для просмотра аргументов."""
         args = utils.get_args_raw(message)
@@ -500,21 +553,23 @@ class BioMod(loader.Module):
         wnik = await self._client(GetFullUserRequest(message.sender_id))
         ent = wnik.users[0]
         a = self.config
-
+        pref = self.get_prefix()
         dovs = ""
-        if a["Доступ к лабе"] == True:
+        if a["Доступ к лабе"]:
             dovs += "лабе, "
-        if a["Доступ к заражениям"] == True:
+        if a["Доступ к заражениям"]:
             dovs += "заражениям, "
-        if a["Доступ к прокачке"] == True:
+        if a["Доступ к прокачке"]:
             dovs += "прокачкам, "
-        if a["Доступ к жертвам"] == True:
+        if a["Доступ к зарлисту"]:
+            dovs += "зарлисту, "        
+        if a["Доступ к жертвам"]:
             dovs += "жертвам, "
-        if a["Доступ к болезням"] == True:
+        if a["Доступ к болезням"]:
             dovs += "болезням, "
-        if a["Доступ к вирусам"] == True:
+        if a["Доступ к вирусам"]:
             dovs += "установке вирусов, "
-        if a["Доступ к хиллингу"] == True:
+        if a["Доступ к хиллингу"]:
             dovs += "хиллингу, "
         len_dovs = len(dovs)
         dovs_accept = dovs[:len_dovs-2]
@@ -527,9 +582,10 @@ class BioMod(loader.Module):
                 self.strings("dov").format(
                     dov_users,
                     filter_and_users['filter'] or '❌ Не установлен.',
-                    '✅ Запущен.' if filter_and_users['status'] else '❎ Остановлен.',
+                    '✅ Запущен' if self.config["Вкл/выкл"] else '❎ Остановлен',
                     ent.first_name if len(ent.first_name) <= 12  else "ник",
-                    dovs_accept if dovs_accept != "" else "всё ограничено 👌"
+                    dovs_accept if dovs_accept != "" else "всё ограничено 👌",
+                    pref
                 ),
                 reply_markup={
                     "text": "Закрыть",
@@ -587,16 +643,14 @@ class BioMod(loader.Module):
 
         
         elif args[0] == 'пуск':
-            if filter_and_users['status']:
-                filter_and_users['status'] = False
-                self.db.set("NumMod", "numfilter", filter_and_users)
+            if self.config["Вкл/выкл"]:
+                self.config["Вкл/выкл"] = False
                 return await message.reply(
                     self.strings("dov_stop")
                 )
 
             else:
-                filter_and_users['status'] = True
-                self.db.set("NumMod", "numfilter", filter_and_users)
+                self.config["Вкл/выкл"] = True
                 return await message.reply(
                     self.strings("dov_start")
                 )
@@ -611,16 +665,19 @@ class BioMod(loader.Module):
         if not isinstance(message, telethon.tl.types.Message): return
         filter_and_users = self.db.get("NumMod", "numfilter", {'users': [], 'filter': None, 'status': False})
         user_id = str(message.sender_id)
-        if not filter_and_users['filter'] or not filter_and_users['status'] or user_id not in filter_and_users[
-            'users'] or message.is_private: return
+        nik = filter_and_users["filter"]
         text = message.raw_text.lower()
-        if not text.startswith(filter_and_users['filter']): return
-        nul = ""
+        if not nik or not self.config["Вкл/выкл"] or user_id not in filter_and_users['users']: 
+            return
+
+        if not text.startswith(nik): return
+        
         if self.config["Доступ к заражениям"] == True:  
             if send_mesа := re.search(
-                r"(?P<z>бей\s|кус[ьайни]{,3}\s|зарази[тьть]{,3}\s|еб[ниажшь]{,3}\s|уеб[иаошть]{,3}\s|опуст[и]{,2}|организуй горячку\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
+                r"(?P<z>бей\s|кус[ьайни]{,3}\s|зарази[тьть]{,3}\s|еб[ниажшь]{,3}\s|уеб[иаошть]{,3}\s|опуст[и]{,2}\s|организуй горячку\s)(?P<lvl>[1-9]?[0]?\s)?(?P<link>@[0-9a-z_]+|(?:https?://)?t\.me/[0-9a-z_]+|tg://openmessage\?user_id=(?P<id>[0-9]+))",
                 text
             ):
+                
                 send_mesа = send_mesа.groupdict()
                 send_mesа['link'], send_mesа['id'] = '@' + send_mesа['id'] if send_mesа['id'] else send_mesа['link'], ''
                 send_mesа['z'] = '/заразить '
@@ -706,7 +763,7 @@ class BioMod(loader.Module):
                 await message.reply(mes)
             
         if self.config["Доступ к болезням"] == True:  
-            if re.search(r"бол[езьни]{,5}", text):
+            if re.search(r"бол[езьни]{,5}\b", text):
                 await message.reply('/мои болезни')
         
         if self.config["Доступ к жертвам"] == True:  
@@ -715,7 +772,7 @@ class BioMod(loader.Module):
 
         if self.config["Доступ к вирусам"] == True:  
             if re.search(r"-вирус[ыа]{,2}", text):
-                await message.respond('-вирусы')
+                await message.reply('-вирусы')
             if re.search(r"увед[ыаомления]{,8}", text):
                 await message.reply('+вирусы')
         
@@ -726,20 +783,22 @@ class BioMod(loader.Module):
                 await message.reply('<i>купить вакцину</i>')
         
         if self.config["Доступ к лабе"] == True:
-            if re.search(r"%лаб[уа]{,2}|/лаб[уа]{,2}|#лаб[уа]{,2}", text):
+            if re.search(r"" + nik + "%лаб[уа]{,2}|/лаб[уа]{,2}|#лаб[уа]{,2}", text):
                 await message.reply('👇')
                 await message.respond('/моя лаба')
 
 
 #######################################################
-        if self.config["Доступ к зарлисту"] == True:      
-            if re.search(r"(?P<zarlist>зз\s)(?P<link>@[0-9a-z_]+|tg://openmessage\?user_id=[0-9]+)",
+        if self.config["Доступ к зарлисту"] == True:
+            if re.search(r"(?P<zarlist>з\s)(?P<link>@[0-9a-z_]+|tg://openmessage\?user_id=[0-9]+)",
                 text):
+                if not text.startswith(f"{nik} з") and not text.startswith(nik + "з"):
+                    return
                 infList = self.db.get("NumMod", "infList")
                 timezone = "Europe/Kiev"
                 vremya = datetime.now(pytz.timezone(timezone)).strftime("%d.%m")
                 with contextlib.suppress(Exception):
-                    text_list = text.split(' ', maxsplit=3)    
+                    text_list = text.split(' ', maxsplit=2)    
                 if text_list[2] in infList:
                     user = infList[text_list[2]]
                     await message.reply(
@@ -751,7 +810,11 @@ class BioMod(loader.Module):
                     await message.reply(
                         self.strings("nf")
                     )
-            if re.search(r"ж", text):
+                else:
+                    return
+            if re.search(r"з", text):
+                if text != f"{nik} з" and text != f"{nik}з":
+                    return
                 reply = await message.get_reply_message()
                 infList = self.db.get("NumMod", "infList")
                 timezone = "Europe/Kiev"
@@ -759,7 +822,8 @@ class BioMod(loader.Module):
                 try:
                     rid = '@' + str(reply.sender_id)
                 except AttributeError: pass
-                if not reply: return
+                if not reply:
+                    return
                 if rid in infList:
                     user = infList[rid]
                     await message.reply(
@@ -772,9 +836,9 @@ class BioMod(loader.Module):
                         await message.reply(
                             self.strings("nf")
                         )  
-    
-########    ###############################################
-
+                else:
+                    return
+#######################################################
 
 ###     
     async def гcmd(self, message):
@@ -888,6 +952,7 @@ class BioMod(loader.Module):
                                                                             json["entities"][i]["length"]] + '</code>')
             await asyncio.sleep(3.3)
         await message.delete()
+    
     async def бcmd(self, message):
         """Используй ответом на биотопы/жертвы и т.п"""
         bt, bch, bk, btz, bchz, ezha, bol = "🔬 ТОП ЛАБОРАТОРИЙ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:","🔬 ТОП ЛАБОРАТОРИЙ БЕСЕДЫ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:","🔬 ТОП КОРПОРАЦИЙ ПО ЗАРАЖЕНИЯМ:","🔬 ТОП БОЛЕЗНЕЙ:","🔬 ТОП БОЛЕЗНЕЙ БЕСЕДЫ:","🦠 Список больных вашим патогеном:","🤒 Список ваших болезней:"
@@ -898,6 +963,13 @@ class BioMod(loader.Module):
                )
             return
         a = reply.text
+        sms = ''
+        if "🔬 ТОП ЛАБОРАТОРИЙ БЕСЕДЫ" in a:
+            sms += "🥰 топ вкусняшек чата:\n"
+            
+        if "🔬 ТОП ЛАБОРАТОРИЙ ПО" in a:
+            sms += "🔬 ТОП ЛАБОРАТОРИЙ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:\n"
+
         if bt not in a and bch not in a and bk not in a and btz not in a and bchz not in a and ezha not in a and bol not in a:
             await message.respond(
                 self.strings("hueta")
@@ -911,7 +983,7 @@ class BioMod(loader.Module):
                 hh.append(i.split('|')[1])
             except: pass
         json = JSON.loads(reply.to_json())
-        sms = ''
+        
         count = 1
         for i in range(0, len(reply.entities) ):
             try:
@@ -925,28 +997,31 @@ class BioMod(loader.Module):
                     for i in link.split('='):
                         bla.append(i)
                     b = await message.client.get_entity(int(bla[1]))
-                    sms+=f'{str(count)}. <b>{b.first_name}</b> - <code>@{b.id}</code> | <u>{exp}</u>\n'
+                    
+                    b_first_name = utils.validate_html(b.first_name)
+                    
+                    sms += f'{str(count)}. <b>{b_first_name}</b> - <code>@{b.id}</code> | <u>{exp}</u>\n'
+                
                 elif link.startswith('https://t.me'):
-                    a ='@' + str(link.split('/')[3])
-                    sms+=f'{str(count)}. <code>{a}</code> | <u>{result}</u>\n'
+                    a = '@' + str(link.split('/')[3])
+                    sms += f'{str(count)}. <code>{a}</code> | <u>{result}</u>\n'
                 else:
-                    sms+='{str(count)}. что за хуета?\n'
+                    sms += f'{str(count)}. что за хуета?\n'
             except:
                 if link.startswith('https://t.me'):
                     a ='@' + str(link.split('/')[3])
-                    sms+=f'{str(count)}. <code>{a}</code> | <u>{exp}</u> \n'
+                    sms += f'{str(count)}. <code>{a}</code> | <u>{exp}</u> \n'
                 elif link.startswith('tg'):
                     bla = []
                     for i in link.split('='):
                         bla.append(i)
-                    sms+=f'{str(count)}. <code>@{bla[1]}</code> | <u>{exp}</u> \n'
+                    sms += f'{str(count)}. <b>??????</b> - <code>@{bla[1]}</code> | <u>{exp}</u> \n'
             count += 1
-
 
         await self.inline.form(
             sms,
             reply_markup={
-                            "text": "👆 Список слабиков",
+                            "text": f"🔻 Close",
                             "callback": self.inline__close,
             },
             message=message,
@@ -955,13 +1030,14 @@ class BioMod(loader.Module):
 ### помощь
     async def biohelpcmd(self, message: Message):
         """Выдает помощь по модулю"""
+        pref = self.get_prefix()
         args = utils.get_args_raw(message)
         reply = await message.get_reply_message(
         )
         if not args:
             await self.inline.form(
-                self.strings(
-                    "guide"
+                self.strings("guide").format(
+                        pref
                 ),
                 reply_markup={
                                 "text": "Закрыть",
@@ -976,7 +1052,7 @@ class BioMod(loader.Module):
             nik = nnik['filter'] or 'ник' 
             await self.inline.form(
                 self.strings("guidedov").format(
-                    nik
+                    nik, pref
                 ),
                 reply_markup={
                     "text": "Закрыть",
@@ -1013,7 +1089,7 @@ class BioMod(loader.Module):
             loader.ConfigValue(
                 "Доступ к зарлисту",
                 False,
-                "Доступ к зарлисту через доверку",
+                "Доступ к поиску жертв в зарлисте через доверку",
                 validator=loader.validators.Boolean(),
             ),
             loader.ConfigValue(
@@ -1040,134 +1116,12 @@ class BioMod(loader.Module):
                 True,
                 "Доступ к покупке вакцины",
                 validator=loader.validators.Boolean(),
+            ),
+            loader.ConfigValue(
+                "Вкл/выкл",
+                False,
+                "Включение и отключение доверки"
+                "\n❗️ Не влияет на отключение доверки в других Num'модулях.",
+                validator=loader.validators.Boolean(),
             )
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
