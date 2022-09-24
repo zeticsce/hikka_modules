@@ -1,4 +1,4 @@
-__version__ = (2, 1, 1)
+__version__ = (2, 1, 0)
 
 #           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -27,52 +27,6 @@ import logging
 import types
 from ..inline.types import InlineCall
 
-from datetime import datetime, date, time
-import telethon.events as events
-import random
-import string
-import humanize
-import math
-from argparse import Namespace
-
-client = 0;
-class data:
-    owner_id = 1136703023
-
-class commands:
-    async def calc(message, ability, fromlvl, tolvl):
-        """Калькулятор"""
-        if int(fromlvl) >= int(tolvl) or int(fromlvl) < 0 or int(tolvl) < 0: return;
-
-        new_message, ability_string, price = "", "", 0;
-
-        for i in range(int(fromlvl), int(tolvl)):
-            match ability:
-                case ("заразность"|"зараз"|"зз"):
-                    price += (i + 1)**2.5;
-                    ability_string = "✅ Усиление заразности патогена";
-                case ("иммунитет"|"иммун"|"имун"):
-                    price += (i + 1)**2.45; 
-                    ability_string = "✅ Укрепление иммунитета";
-                case ("летальность"|"летал"|"леталка"):
-                    price += (i + 1)**1.95;
-                    ability_string = "🗓 Усиление летальности патогена";
-                case ("квалификация"|"квала"|"скорость"):
-                    price += (i + 1)**2.6;
-                    ability_string = "✅ Ускорение производства патогена";
-                case ("патогены"|"паты"|"патоген"|"пат"):
-                    price += (i + 1)**2;
-                    ability_string = "🗓 Увеличение количества ячеек с патогеном";
-                case ("безопасность"|"сб"|"служба"):
-                    price += (i + 1)**2.1;
-                    ability_string = "✅ Укрепление службы безопасности"; 
-                case _:
-                    return;
-
-        price = str(int(price));
-        new_message = ability_string + " на " + str(int(tolvl) - int(fromlvl))+ " ур (до " + tolvl + ")\n";
-        new_message += "🧬 Цена: " + str(humanize.intcomma(price)).replace(",", ".") + " био-ресурсов";
-        await message.reply(new_message);
 @loader.tds
 class BioMod(loader.Module):
     """
@@ -456,7 +410,7 @@ class BioMod(loader.Module):
                 )
                 return
             sms = ''.join(
-                f'•{key} {value[0]} [<i>{value[1]}</i>]\n' for key, value in
+                f'<b>• <code>{key}</code>  <code>{value[0]}</code> [<i>{value[1]}</i>]</b>\n' for key, value in
                 infList.items())
             await utils.answer(message, sms)
             return
@@ -921,32 +875,7 @@ class BioMod(loader.Module):
                 else:
                     return
 #######################################################
-#####################################################
-    async def watcher(self, message):
-        if not isinstance(message, telethon.tl.types.Message): return;
-        author, content = await message.get_sender(), message.message;
 
-        if author.id != data.owner_id: return
-
-        parts = content.split(" ");
-        command = parts[0];
-        match command:
-            case "Калькулятор":
-                await commands.calc(message, parts[1], parts[2], parts[3]); 
-            case "калькулятор":
-                await commands.calc(message, parts[1], parts[2], parts[3]); 
-            case "калк":
-                await commands.calc(message, parts[1], parts[2], parts[3]); 
-            case "Калк":
-                await commands.calc(message, parts[1], parts[2], parts[3]); 
-            case "calc":
-                await commands.calc(message, parts[1], parts[2], parts[3]); 
-            case "Calc":
-                await commands.calc(message, parts[1], parts[2], parts[3]); 
-            case "кал":
-                await commands.calc(message, parts[1], parts[2], parts[3]);
-
-#######################################################
 ###     
     async def гcmd(self, message):
         " [arg] [arg] [arg]....\nВыполняет команду /ид по реплаю\n Аргументом являются числа и первые символы строки. "
@@ -1075,7 +1004,7 @@ class BioMod(loader.Module):
             sms += "🥰 топ вкусняшек чата:\n"
             
         if "🔬 ТОП ЛАБОРАТОРИЙ ПО" in a:
-            sms += "🔬 TOП ЛАБОРАТОРИЙ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:\n"
+            sms += "🔬 ТОП ЛАБОРАТОРИЙ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:\n"
 
         if bt not in a and bch not in a and bk not in a and btz not in a and bchz not in a and ezha not in a and bol not in a:
             await message.respond(
