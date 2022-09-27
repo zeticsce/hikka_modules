@@ -66,5 +66,7 @@ class HZNumMod(loader.Module):
 		if not filter_and_users['filter'] or not filter_and_users['status'] or user_id not in filter_and_users['users'] or message.is_private: return
 		text = message.raw_text.lower()
 		if not text.startswith(filter_and_users['filter']): return
-		send_mes = re.search(r"покажи|ли[ст]|жертвы|жертв[ыу]|жерт[ва]{,2}", text)
-		if send_mes: await message.respond('мои жертвы')
+		send_mes = re.search(r"жертв[ыау]{,2}", text)
+		if send_mes: await message.respond('/мои жертвы')
+		send_mes = re.search(r"бол[езни]{,5}", text)
+		if send_mes: await message.respond('/мои болезни')
