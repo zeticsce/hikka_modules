@@ -1,4 +1,4 @@
-__version__ = (2, 3, 1)
+__version__ = (2, 5, 0)
 
 #           ███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #           ╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -26,6 +26,10 @@ from datetime import datetime, date, time
 import logging
 import types
 from ..inline.types import InlineCall
+
+import subprocess
+import string, pickle
+
 
 @loader.tds
 class BioMod(loader.Module):
@@ -156,7 +160,14 @@ class BioMod(loader.Module):
         
         "guide":
             "<b>Помощь по модулю BioHelper:</b>\n\n"
-            "<code>{}biohelp дов</code> 👈 Помощь по доверке"
+            "<code>{}biohelp дов</code> 👈 Помощь по доверке",
+
+        "zarlistbackup":
+            
+            "<b>Используй:</b>\n"
+            "<emoji document_id=5215720576735255650>👉</emoji> <code>{0}bioback -b</code>  <i>чтобы сделать копию</i>\n"
+            "<emoji document_id=5215720576735255650>👉</emoji> <code>{0}bioback -r</code>  <i>что загрузить зарлист</i>"
+
 
     }
     async def client_ready(self, client, db):
@@ -185,7 +196,11 @@ class BioMod(loader.Module):
                 "firstname": entity.first_name
             }
     async def айcmd(self, message):
-        """[reply]\nПолучает айди пользователя по реплаю."""
+        """
+[reply]
+Получает айди пользователя по реплаю.
+        """
+        
         reply = await message.get_reply_message()
         vlad = message.sender_id
         args = utils.get_args(message)
@@ -203,7 +218,12 @@ class BioMod(loader.Module):
         )
 ### Module Num by trololo_1
     async def зcmd(self, message):
-        " [arg] [arg] [arg]....\n В качестве аргументов используй числа или первые символы строки.\n(без них бьет по ответу с 10 патов)"
+        """
+[arg] [arg] [arg]....
+В качестве аргументов используй числа или первые символы строки.
+(без них бьет по ответу с 10 патов)
+        """
+        
         reply = await message.get_reply_message()
         exlist = self.db.get("NumMod", "exUsers")
         count_st = 0
@@ -288,7 +308,11 @@ class BioMod(loader.Module):
                 self.strings("tzar")
             )
     async def оcmd(self, message):
-        """Заражает всех по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
+        """
+Заражает всех по реплаю.
+Используй ответ на сообщение с @id/@user/link
+        """
+        
         reply = await message.get_reply_message()
         exlist = self.db.get("NumMod", "exUsers")
         err = "1"
@@ -346,7 +370,11 @@ class BioMod(loader.Module):
         if err != "2":
             await message.delete()
     async def искcmd(self, message):
-        """Добавляет исключения для команд .з и .о\nИспользуй: .иск {@user/@id/reply}"""
+        """
+Добавляет исключения для команд .з и .о
+Используй: .иск {@user/@id/reply}
+        """
+        
         reply = await message.get_reply_message()
         args = utils.get_args_raw(message)
         exlistGet = self.db.get("NumMod", "exUsers")
@@ -394,7 +422,17 @@ class BioMod(loader.Module):
             )
         )
     async def зарcmd(self, message):
-        """ Список ваших заражений.\n.зар {@id/user} {count} {args}\nДля удаления: .зар {@id/user}\nАргументы:\nк -- добавить букву k(тысяч) к числу.\nф -- поиск по ид'у/юзеру.\nр -- добавлению в список по реплаю. """
+        """
+Список ваших заражений.
+.зар {@id/user} {count} {args}
+Для удаления: .зар {@id/user}
+
+Аргументы:
+к -- добавить букву k(тысяч) к числу.
+ф -- поиск по ид'у/юзеру.
+р -- добавлению в список по реплаю.
+        """
+        
         args = utils.get_args_raw(message)
         infList = self.db.get("NumMod", "infList")
         timezone = "Europe/Kiev"
@@ -573,13 +611,13 @@ class BioMod(loader.Module):
                     return await message.reply(
                         self.strings("wrong_cmd")
                     )                
-            if re.fullmatch(r"@\D\w{3,32}", user, flags=re.ASCII):
-                try:
-                    get_id = await message.client.get_entity(user)
-                    get_id = get_id.id
-                    user = "@" + str(get_id)
-                except:
-                    pass              
+            if re.fullmatch(r"@\D{3,32}\w{3,32}", user, flags=re.ASCII):
+
+                get_id = await message.client.get_entity(user)
+                get_id = get_id.id
+                user = "@" + str(get_id)
+
+                                  
             if 'к' in args.lower() and pas == 0 or 'k' in args.lower() and pas == 0:
                 k += "k"     
             infList[user] = [str(count) + k, vremya]
@@ -591,7 +629,11 @@ class BioMod(loader.Module):
             )
     
     async def довcmd(self, message):
-        """ {args1} {args2 OR reply} \nВведи команду для просмотра аргументов."""
+        """
+{args1} {args2 OR reply}
+Введи команду для просмотра аргументов.
+        """
+        
         args = utils.get_args_raw(message)
         reply = await message.get_reply_message()
         filter_and_users = self.db.get("NumMod", "numfilter", {'users': [], 'filter': None, 'status': False})
@@ -711,7 +753,7 @@ class BioMod(loader.Module):
         filter_and_users = self.db.get("NumMod", "numfilter", {'users': [], 'filter': None, 'status': False})
         user_id = str(message.sender_id)
         nik = filter_and_users["filter"]
-        text = message.text.lower()
+        text = message.raw_text.lower()
         reply = await message.get_reply_message()
 
         if not nik or not self.config["Вкл/выкл"] or user_id not in filter_and_users['users']: 
@@ -946,7 +988,12 @@ class BioMod(loader.Module):
 
 ###     
     async def гcmd(self, message):
-        " [arg] [arg] [arg]....\nВыполняет команду /ид по реплаю\n Аргументом являются числа и первые символы строки. "
+        """
+[arg] [arg] [arg]....
+Выполняет команду /ид по реплаю.
+Аргументом являются числа и первые символы строки.
+        """
+        
         reply = await message.get_reply_message()
         
         count_st = 0
@@ -1023,7 +1070,11 @@ class BioMod(loader.Module):
             await asyncio.sleep(3.3)
 
     async def иcmd(self, message):
-        """Чекает все айди по реплаю.\nИспользуй ответ на сообщение с @id/@user/link"""
+        """
+Чекает все айди по реплаю.
+Используй ответ на сообщение с @id/@user/link
+        """
+        
         reply = await message.get_reply_message()
         exlist = self.db.get("NumMod", "exUsers")
         if not reply:
@@ -1058,7 +1109,10 @@ class BioMod(loader.Module):
         await message.delete()
     
     async def бcmd(self, message):
-        """Используй ответом на биотопы/жертвы и т.п"""
+        """
+Используй ответом на биотопы/жертвы и т.п
+        """
+        
         bt, bch, bk, btz, bchz, ezha, bol = "🔬 ТОП ЛАБОРАТОРИЙ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:","🔬 ТОП ЛАБОРАТОРИЙ БЕСЕДЫ ПО БИО-ОПЫТУ ЗАРАЖЁННЫХ:","🔬 ТОП КОРПОРАЦИЙ ПО ЗАРАЖЕНИЯМ:","🔬 ТОП БОЛЕЗНЕЙ:","🔬 ТОП БОЛЕЗНЕЙ БЕСЕДЫ:","🦠 Список больных вашим патогеном:","🤒 Список ваших болезней:"
         reply = await message.get_reply_message()
         
@@ -1076,7 +1130,7 @@ class BioMod(loader.Module):
             sms += "🥰 топ вкусняшек чата:\n"
             
         if "🔬 ТОП ЛАБОРАТОРИЙ ПО" in a:
-            sms += "🔬 ТOП ЛАБОРАТOРИЙ ПО БИO-ОПЫТУ ЗАРAЖЁННЫХ:\n"
+            sms += "🔬 ТOП ИММУНОДРОЧЕРОВ:\n" #ЛАБОРАТOРИЙ ПО БИO-ОПЫТУ ЗАРAЖЁННЫХ:
 
         if bt not in a and bch not in a and bk not in a and btz not in a and bchz not in a and ezha not in a and bol not in a:
             await message.respond(
@@ -1160,7 +1214,10 @@ class BioMod(loader.Module):
             await message.reply(sms)
 ### помощь
     async def biohelpcmd(self, message: Message):
-        """Выдает помощь по модулю"""
+        """
+Выдает помощь по модулю
+        """
+        
         pref = self.get_prefix()
         args = utils.get_args_raw(message)
         reply = await message.get_reply_message(
@@ -1193,6 +1250,67 @@ class BioMod(loader.Module):
                 message=message,
                 disable_security=False
             )   
+
+    async def biobackcmd(self, message):
+        """
+Бекап зарлиста 
+        """
+        pref = self.get_prefix()
+        args = utils.get_args_raw(message).strip()
+        infList = self.db.get("NumMod", "infList")
+        file_name = 'zarlistbackup.pickle'
+        id = message.to_id
+        reply = await message.get_reply_message()
+        
+
+
+        if not args:
+            await message.edit(
+                self.strings("zarlistbackup").format(
+                    pref
+                )     
+            )
+        if args == '-b':
+            try:
+                await message.delete()
+                dict_all = { 'zar': infList}
+                with open(file_name, 'wb') as f:
+                    pickle.dump(dict_all, f)
+                await message.client.send_file(id, file_name)
+            except Exception as e:
+                await utils.answer(message, f"<b>Ошибка:\n</b>{e}")
+        elif args == '-r':
+            reply_document = ""
+            try:
+                reply_document = reply.document
+            except AttributeError:
+                pass
+
+            try:
+                if not reply:
+                    return await message.reply(
+                        self.strings("not_reply")
+                    )
+                if not reply_document:
+                    return await utils.answer(message, f"<b>Это не файл.</b>")
+
+                await reply.download_media(file_name)
+                with open(file_name, 'rb') as f:
+                    data = pickle.load(f)
+                zar = data['zar']
+                result_zar = dict(infList, **zar)
+                
+                self.db.set("NumMod", "infList", result_zar)
+                
+                await utils.answer(message, f"<b>Бекап зарлиста загружен!</b>")
+            except Exception as e:
+                await utils.answer(message, f"<b>пиздец, Ошибка:\n</b>{e}")
+
+
+
+
+
+
 
     async def inline__close(self, call) -> None:
         await call.delete()
