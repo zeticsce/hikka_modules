@@ -1,4 +1,4 @@
-__version__ = (0, 0, 0)
+__version__ = (1, 0, 0)
 
 #			███████╗███████╗████████╗██╗░█████╗░░██████╗░█████╗░███████╗
 #			╚════██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
@@ -17,18 +17,18 @@ from .. import loader, utils
 import asyncio
 import telethon
 @loader.tds
-class hillSBMod(loader.Module):
+class SBebMod(loader.Module):
     """
 Покупает вакцину и бьет по сб
     """
     strings = {
-        "name": "hillSB"
+        "name": "sbeb"
 
     }
     
     async def зоcmd(self, message):
         """
-Используй: .сб {кол-во патов} [реплай]
+Используй: .зо {кол-во патов} [реплай]
         """
         try:
             reply = await message.get_reply_message()
