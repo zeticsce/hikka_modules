@@ -6,11 +6,11 @@ __version__ = (3, 2, 0)
 #           ██╔══╝░░██╔══╝░░░░░██║░░░██║██║░░██╗░╚═══██╗██║░░██╗██╔══╝░░
 #           ███████╗███████╗░░░██║░░░██║╚█████╔╝██████╔╝╚█████╔╝███████╗
 #           ╚══════╝╚══════╝░░░╚═╝░░░╚═╝░╚════╝░╚═════╝░░╚════╝░╚══════
-#                              НЕ © Copyright 2022
+#                              НЕ © Copyright 2023
 #                             https://t.me/zet1csce              
 
 
-# developer of Num: @trololo_1
+# developer of NumMod: @trololo_1
 # meta developer: @zet1csce
 from .. import loader, utils  # noqa
 import asyncio
