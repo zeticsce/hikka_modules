@@ -33,12 +33,12 @@ class FarmIrisMod(loader.Module):
         """Запустить автофарминг"""
         status = self.db.get(self.name, "status", False)
         if status:
-            return await message.edit(self.strings["farmon_already"])
+            return await utils.answer(message, self.strings["farmon_already"])
         self.db.set(self.name, "status", True)
         await self.client.send_message(
             self.iris, "Фарма", schedule=timedelta(seconds=20)
         )
-        await message.edit(self.strings["farmon"])
+        await utils.answer(message, self.strings["farmon"])
 
     async def farmoffcmd(self, message):
         """Остановить автофарминг"""
@@ -46,12 +46,12 @@ class FarmIrisMod(loader.Module):
         coins = self.db.get(self.name, "coins", 0)
         if coins:
             self.db.set(self.name, "coins", 0)
-        await message.edit(self.strings["farmoff"].replace("%coins%", str(coins)))
+        await utils.answer(message, self.strings["farmoff"].replace("%coins%", str(coins)))
 
     async def farmcmd(self, message):
         """Вывод кол-ва коинов, добытых этим модулем"""
         coins = self.db.get(self.name, "coins", 0)
-        await message.edit(self.strings["farm"].replace("%coins%", str(coins)))
+        await utils.answer(message, self.strings["farm"].replace("%coins%", str(coins)))
 
     async def watcher(self, event):
         if not isinstance(event, Message):
